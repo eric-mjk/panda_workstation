@@ -1,0 +1,12 @@
+[submodule "ros2_ws/src/panda_ros2"]
+	path = ros2_ws/src/panda_ros2
+	url = https://github.com/eric-mjk/_forked_panda_ros2.git
+	branch = humble
+[submodule "ros2_ws/src/pymoveit2"]
+	path = ros2_ws/src/pymoveit2
+	url = https://github.com/eric-mjk/_forked_pymoveit2.git
+	branch = main
+[submodule "ros2_ws/src/topic_based_ros2_control"]
+	path = ros2_ws/src/topic_based_ros2_control
+	url = https://github.com/PickNikRobotics/topic_based_ros2_control.git
+	branch = main

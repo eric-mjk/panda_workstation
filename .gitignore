@@ -1,0 +1,19 @@
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# secrets / env
+.env
+*.env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+.pc/
+
+# Experiment logs / artifacts
+wandb/
+*.wandb
+
+# Local tool state
+.claude/settings.json
+.codex
