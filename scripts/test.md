@@ -1,4 +1,55 @@
-Done. Here's how to use it:
+1. Move the ROBOT ARM to the desired location
+2. Run the command below
+
+ros2 run tf2_ros tf2_echo panda_link0 panda_hand_tcp
+
+-> Get x, y, z coordinate result
+(ex) 0.476, 0.037, 0.071
+
+3. Return the robot to home position
+
+ros2 run pymoveit2 panda_ready.py
+
+4. Take a picture
+ros2 python scripts/save_camera_image.py
+
+5. Change the 'point' variable below and run it to view the result
+
+python3 scripts/project_to_image.py \
+    --point 0.476 0.037 0.071 \
+    --image /workspace/camera_snapshot.png \
+    --cam_pos 0.400 -0.003 0.529 \
+    --cam_quat 0.707 -0.707 -0.003 -0.009
+
+
+6. Save the result
+
+python3 scripts/project_to_image.py \
+    --point 0.476 0.037 0.071 \
+    --image /workspace/camera_snapshot.png \
+    --cam_pos 0.400 -0.003 0.529 \
+    --cam_quat 0.707 -0.707 -0.003 -0.009
+    --output /tmp/result.png
+
+
+
+
+
+
+
+
+
+
+Ignore this
+
+
+
+=======================================================
+ros2 run tf2_ros tf2_echo panda_link0 camera_link
+- Translation: [0.400, -0.003, 0.529]
+- Rotation: in Quaternion (xyzw) [0.707, -0.707, -0.003, -0.009]
+=======================================================
+
 
 1. Get the camera pose while the robot is running:
 
