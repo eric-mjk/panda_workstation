@@ -17,3 +17,4 @@ wandb/
 # Local tool state
 .claude/settings.json
 .codex
+ros2_ws/tsdf_meshes/*.ply

@@ -1,0 +1,35 @@
+/camera/color/camera_info:
+  header:
+    frame_id: l515_camera
+  width: 1920
+  height: 1080
+  k:
+    - 1399.0697520372776
+    - 0.0
+    - 960.0
+    - 0.0
+    - 1399.0697520372776
+    - 540.0
+    - 0.0
+    - 0.0
+    - 1.0
+
+sim_rgbd_to_pointcloud:
+  ros__parameters:
+    rgb_topic: /isaac_rgb
+    depth_topic: /isaac_depth
+    points_topic: /camera/rgbd/points
+    frame_id: l515_camera
+    use_message_timestamp: false
+    depth_scale: 1.0
+    max_depth: 10.0
+    sync_slop: 0.5
+    stride: 4
+
+tsdf_debug:
+  ros__parameters:
+    world_frame: panda_link0
+    output_dir: /workspace/ros2_ws/tsdf_meshes
+    mesh_marker_topic: /tsdf_mesh_marker
+    keyboard_poll_period: 0.05
+    status_log_period: 2.0

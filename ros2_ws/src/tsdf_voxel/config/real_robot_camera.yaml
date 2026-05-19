@@ -1,0 +1,50 @@
+/camera/color/camera_info:
+  header:
+    frame_id: camera_link
+  width: 1280
+  height: 720
+  k:
+    - 906.4620361328125
+    - 0.0
+    - 645.7659912109375
+    - 0.0
+    - 906.65283203125
+    - 375.2723388671875
+    - 0.0
+    - 0.0
+    - 1.0
+
+realsense_publisher:
+  ros__parameters:
+    serial_no: ""
+    color_width: 1280
+    color_height: 720
+    color_fps: 30
+    depth_width: 640
+    depth_height: 480
+    depth_fps: 30
+    enable_color: true
+    enable_depth: true
+    enable_aligned_depth: true
+    color_auto_exposure: false
+    color_exposure: 600.0
+    color_gain: 32.0
+    depth_min_distance: 0.0
+
+rgbd_to_pointcloud:
+  ros__parameters:
+    rgb_topic: /camera/color/image_raw
+    depth_topic: /camera/aligned_depth_to_color/image_raw
+    points_topic: /camera/rgbd/points
+    frame_id: camera_link
+    depth_scale: 4000.0
+    max_depth: 3.0
+    stride: 4
+
+tsdf_debug:
+  ros__parameters:
+    world_frame: panda_link0
+    output_dir: /workspace/ros2_ws/tsdf_meshes
+    mesh_marker_topic: /tsdf_mesh_marker
+    keyboard_poll_period: 0.05
+    status_log_period: 2.0

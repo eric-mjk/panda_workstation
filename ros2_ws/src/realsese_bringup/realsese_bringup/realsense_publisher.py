@@ -113,7 +113,7 @@ class RealSensePublisher(Node):
                 # self.get_logger().info(f'Publishing color frame {color_img.shape} at {now.sec}.{now.nanosec:09d}')
                 color_msg = self._bridge.cv2_to_imgmsg(color_img, encoding='bgr8')
                 color_msg.header.stamp = now
-                color_msg.header.frame_id = 'camera_color_optical_frame'
+                color_msg.header.frame_id = 'camera_link'
                 self._camera_info.header.stamp = now
                 self._color_pub.publish(color_msg)
                 self._info_pub.publish(self._camera_info)
@@ -125,7 +125,7 @@ class RealSensePublisher(Node):
                 # self.get_logger().info(f'Publishing depth frame {depth_img.shape} at {now.sec}.{now.nanosec:09d}')
                 depth_msg = self._bridge.cv2_to_imgmsg(depth_img, encoding='16UC1')
                 depth_msg.header.stamp = now
-                depth_msg.header.frame_id = 'camera_depth_optical_frame'
+                depth_msg.header.frame_id = 'camera_link'
                 self._depth_pub.publish(depth_msg)
 
         if self._enable_aligned:
@@ -135,12 +135,12 @@ class RealSensePublisher(Node):
                 aligned_img = np.asanyarray(aligned_depth.get_data()).copy()
                 aligned_msg = self._bridge.cv2_to_imgmsg(aligned_img, encoding='16UC1')
                 aligned_msg.header.stamp = now
-                aligned_msg.header.frame_id = 'camera_color_optical_frame'
+                aligned_msg.header.frame_id = 'camera_link'
                 self._aligned_pub.publish(aligned_msg)
 
     def _build_camera_info(self, intrinsics) -> CameraInfo:
         msg = CameraInfo()
-        msg.header.frame_id = 'camera_color_optical_frame'
+        msg.header.frame_id = 'camera_link'
         msg.width = intrinsics.width
         msg.height = intrinsics.height
         msg.distortion_model = 'plumb_bob'
