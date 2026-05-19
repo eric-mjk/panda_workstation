@@ -36,23 +36,22 @@ Available images:
 /workspace/   (= ~/Eric/panda_workstation on host)
   ros2_ws/          ← ROS 2 colcon workspace
     src/
-      panda_ros2/   ← Franka hardware driver packages (forked submodule)
-      pymoveit2/    ← Python MoveIt 2 client library (submodule)
-      topic_based_ros2_control/  ← Isaac Sim ↔ ros2_control bridge via topics (submodule)
-      realsese_bringup/          ← RealSense camera ROS 2 bringup and camera helpers
-  thinkgrasp/ThinkGrasp/        ← vision-language grasp detection system
-  ClientServerTests/            ← socket client/server skeletons and tests
+      panda_ros2/              ← Franka hardware driver packages (forked submodule)
+      pymoveit2/               ← Python MoveIt 2 client library (forked submodule)
+      topic_based_ros2_control/ ← Isaac Sim ↔ ros2_control bridge via topics (submodule)
+      realsese_bringup/        ← RealSense camera ROS 2 bringup (local package)
+      tsdf_voxel/              ← TSDF 3D reconstruction from RGBD streams (local package)
+  thinkgrasp/ThinkGrasp/      ← vision-language grasp detection system
+  scripts/                    ← standalone utilities (project_to_image.py, save_camera_image.py)
+  ClientServerTests/          ← socket client/server skeletons and tests
 ```
 
-All `src/` directories are git submodules. Initialize with:
-```bash
-git submodule update --init --recursive
-```
-
-Submodule URLs:
+Submodule URLs (initialize with `git submodule update --init --recursive`):
 - `ros2_ws/src/panda_ros2` → `https://github.com/eric-mjk/_forked_panda_ros2.git` (branch: humble)
 - `ros2_ws/src/pymoveit2` → `https://github.com/eric-mjk/_forked_pymoveit2.git` (branch: main)
 - `ros2_ws/src/topic_based_ros2_control` → `https://github.com/PickNikRobotics/topic_based_ros2_control.git`
+
+`realsese_bringup` and `tsdf_voxel` are committed directly (not submodules).
 
 ## Build & Test Commands
 
@@ -96,6 +95,12 @@ ros2 launch franka_moveit_config moveit.launch.py robot_ip:=172.16.0.2 load_grip
 
 # Hardware-only bringup (without MoveIt)
 ros2 launch franka_bringup franka.launch.py robot_ip:=172.16.0.2 use_fake_hardware:=false
+
+# Camera — real robot
+ros2 launch realsese_bringup realrobot_camera.launch.py
+
+# Camera — Isaac Sim
+ros2 launch realsese_bringup sim_camera.launch.py
 ```
 
 Controller management (after bringup):
@@ -127,7 +132,11 @@ ros2 launch franka_moveit_config moveit.launch.py robot_ip:=172.16.0.2 load_grip
 
 **3. Run grasp pipeline** (local/robot PC):
 ```bash
+# Real robot
 ros2 run pymoveit2 grasp_pipeline_realrobot.py --ros-args -p instruction:="pick up the mustard bottle"
+
+# Isaac Sim
+ros2 run pymoveit2 sim_grasp_pipeline_realrobot.py --ros-args -p instruction:="pick up the red bowl" -p grasp_depth_offset_m:=0.0
 ```
 
 **4. Start ThinkGrasp server** (GPU server PC, inside container):
@@ -186,6 +195,8 @@ The main control node (`franka_control2`) creates a multi-threaded executor with
 | Package | Role |
 |---|---|
 | `topic_based_ros2_control` | `ros2_control` hardware interface that bridges to/from ROS topics; used with Isaac Sim (`use_isaac_sim:=true`) so MoveIt communicates with the simulator over joint state/command topics |
+| `realsese_bringup` | RealSense camera driver wrapper; publishes color/depth/aligned-depth topics and camera TF; has real-robot and Isaac Sim variants (`realsense_publisher.py`, `sim_rgbd_pointcloud.py`, TF publishers) |
+| `tsdf_voxel` | TSDF 3D reconstruction using Open3D; two nodes: `tsdf_integrator` (continuous) and `tsdf_integrator_once` (keyboard-triggered); reads RGB+depth topics, integrates frames into a TSDF volume, exports meshes to `/workspace/ros2_ws/tsdf_meshes/`; requires `numpy<1.25` |
 
 **Key design patterns:**
 - **Hardware parameters at runtime**: `franka_hardware` hosts ROS 2 parameter services so controllers and users can change robot behavior (stiffness, collision thresholds, TCP frame) without restart.
@@ -195,7 +206,31 @@ The main control node (`franka_control2`) creates a multi-threaded executor with
 
 ### pymoveit2
 
-Python client library (`ros2_ws/src/pymoveit2/`) providing async MoveIt 2 interfaces. Key classes: `MoveIt2` (arm planning/execution), `MoveIt2Gripper`, `MoveIt2Servo`. Used to drive the Panda from Python nodes without writing C++ controllers.
+Python client library (`ros2_ws/src/pymoveit2/`) providing async MoveIt 2 interfaces. Key classes: `MoveIt2` (arm planning/execution), `MoveIt2Gripper`, `MoveIt2Servo`. The forked version adds:
+
+- `custom_scripts/` — arm movement utilities: `panda_ready.py` (home position), `panda_joint_goal.py`, `panda_pose_goal.py`, `panda_gripper_control.py`, and Isaac Sim equivalents
+- `thinkgrasp/` — grasp pipeline scripts: `grasp_pipeline_realrobot.py`, `sim_grasp_pipeline_realrobot.py`, and server-side helpers (`send_grasp_request*.py`)
+
+Run custom scripts via `ros2 run pymoveit2 <script_name>`.
+
+### TSDF 3D Reconstruction
+
+`tsdf_voxel` integrates RGBD frames into an Open3D TSDF volume for 3D scene reconstruction.
+
+```bash
+# Debug mode — press a key to integrate one frame, 's' to save mesh
+ros2 run tsdf_voxel tsdf_integrator_once --ros-args \
+  -p camera_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/sim_robot_camera.yaml \
+  -p tsdf_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/tsdf_debug.yaml
+
+# Continuous integration via launch file (real robot)
+ros2 launch tsdf_voxel tsdf_integrator.launch.py
+
+# Visualize a saved mesh
+python3 -c "import open3d as o3d; mesh=o3d.io.read_triangle_mesh('<path>.ply'); mesh.compute_vertex_normals(); o3d.visualization.draw_geometries([mesh])"
+```
+
+Camera intrinsics/extrinsics for TSDF are in `config/real_robot_camera.yaml` and `config/sim_robot_camera.yaml`; TSDF volume params (voxel size, truncation, bounds) go in a separate YAML passed via `tsdf_config_file`.
 
 ### Client-Server Architecture
 
