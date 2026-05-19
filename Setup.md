@@ -17,8 +17,8 @@ docker run -it -d --net=host --ipc=host \
   --gpus all\
   --privileged\
   --name eric_panda\
-  -v ~/Eric/panda_ws:/workspace \
-  ericmjk/panda_thinkgrasp:sim
+  -v ~/Eric/panda_workstation:/workspace \
+  ericmjk/panda_ws:vanilla
 
   
 # Images

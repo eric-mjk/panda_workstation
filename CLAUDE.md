@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Docker Environment
 
-This workspace is designed to run inside a Docker container. The host directory `~/Eric/panda_ws` is mounted as `/workspace` inside the container.
+This workspace is designed to run inside a Docker container. The host directory `~/Eric/panda_workstation` is mounted as `/workspace` inside the container.
 
 **Start the container:**
 ```bash
@@ -17,12 +17,18 @@ docker run -it -d \
   -v /dev/bus/usb:/dev/bus/usb \
   --name panda \
   -e DISPLAY=$DISPLAY \
+  -e QT_X11_NO_MITSHM=1 \
+  -e ROS_DOMAIN_ID=0 \
+  -e RMW_IMPLEMENTATION=rmw_fastrtps_cpp \
+  -e FASTDDS_BUILTIN_TRANSPORTS=UDPv4 \
   -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
   -v ~/Eric/panda_workstation:/workspace \
   ericmjk/panda_ws:vanilla
 ```
 
-Available images: `ericmjk/panda_ws:vanilla`, `ericmjk/panda_ws:latest`, `ericmjk/panda_ws:thinkgrasp`
+Available images:
+- `ericmjk/panda_ws:vanilla` / `ericmjk/panda_ws:latest` — ROS 2 + MoveIt + libfranka
+- `ericmjk/panda_thinkgrasp:sim` — includes ThinkGrasp + SAM3 (use for grasp pipeline)
 
 ## Workspace Layout
 
@@ -33,17 +39,19 @@ Available images: `ericmjk/panda_ws:vanilla`, `ericmjk/panda_ws:latest`, `ericmj
       panda_ros2/   ← Franka hardware driver packages (forked submodule)
       pymoveit2/    ← Python MoveIt 2 client library (submodule)
       topic_based_ros2_control/  ← Isaac Sim ↔ ros2_control bridge via topics (submodule)
-      realsense_examples/        ← RealSense camera ROS 2 examples
+      realsese_bringup/          ← RealSense camera ROS 2 bringup and camera helpers
+  thinkgrasp/ThinkGrasp/        ← vision-language grasp detection system
+  ClientServerTests/            ← socket client/server skeletons and tests
 ```
 
-All `src/` submodules. Initialize them with:
+All `src/` directories are git submodules. Initialize with:
 ```bash
 git submodule update --init --recursive
 ```
 
 Submodule URLs:
-- `ros2_ws/src/panda_ros2` → `https://github.com/eric-mjk/_forked_panda_ros2.git`
-- `ros2_ws/src/pymoveit2` → `https://github.com/eric-mjk/_forked_pymoveit2.git`
+- `ros2_ws/src/panda_ros2` → `https://github.com/eric-mjk/_forked_panda_ros2.git` (branch: humble)
+- `ros2_ws/src/pymoveit2` → `https://github.com/eric-mjk/_forked_pymoveit2.git` (branch: main)
 - `ros2_ws/src/topic_based_ros2_control` → `https://github.com/PickNikRobotics/topic_based_ros2_control.git`
 
 ## Build & Test Commands
@@ -51,6 +59,9 @@ Submodule URLs:
 All commands run **inside the container** from `/workspace/ros2_ws`.
 
 ```bash
+# First-time only: install test dependency
+sudo apt install ros-humble-ros-testing
+
 # Build
 colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCHECK_TIDY=ON
 
@@ -76,13 +87,15 @@ Before running anything, source the workspace: `source /workspace/ros2_ws/instal
 ros2 launch franka_moveit_config moveit.launch.py use_fake_hardware:=true load_gripper:=true
 
 # Isaac Sim (start Isaac Sim first and press Play, then run this)
-ros2 launch franka_moveit_config moveit.launch.py use_isaac_sim:=true load_gripper:=false
+# Scene file: https://drive.google.com/file/d/1yR3XmFyKMNpFvo22lVXZy3M6fGLrfBA_/view
+ros2 launch franka_moveit_config moveit.launch.py use_isaac_sim:=true load_gripper:=true
+ros2 launch franka_moveit_config moveit.launch.py use_isaac_sim:=true load_gripper:=true rviz:=false
 
-# Real robot
-ros2 launch franka_moveit_config moveit.launch.py robot_ip:=<ROBOT_IP> load_gripper:=true
+# Real robot (IP: 172.16.0.2)
+ros2 launch franka_moveit_config moveit.launch.py robot_ip:=172.16.0.2 load_gripper:=true
 
 # Hardware-only bringup (without MoveIt)
-ros2 launch franka_bringup franka.launch.py robot_ip:=<ROBOT_IP> use_fake_hardware:=false
+ros2 launch franka_bringup franka.launch.py robot_ip:=172.16.0.2 use_fake_hardware:=false
 ```
 
 Controller management (after bringup):
@@ -96,6 +109,34 @@ ros2 control load_controller --set-state active joint_velocity_example_controlle
 # Switch active controller
 ros2 control switch_controllers --activate joint_impedance_example_controller \
   --deactivate joint_velocity_example_controller
+```
+
+## ThinkGrasp Pipeline
+
+Full pipeline for real-robot grasping. Run each step in a separate terminal.
+
+**1. Start camera** (local/robot PC, inside container):
+```bash
+ros2 launch realsese_bringup realrobot_camera.launch.py
+```
+
+**2. Start MoveIt** (local/robot PC):
+```bash
+ros2 launch franka_moveit_config moveit.launch.py robot_ip:=172.16.0.2 load_gripper:=true
+```
+
+**3. Run grasp pipeline** (local/robot PC):
+```bash
+ros2 run pymoveit2 grasp_pipeline_realrobot.py --ros-args -p instruction:="pick up the mustard bottle"
+```
+
+**4. Start ThinkGrasp server** (GPU server PC, inside container):
+```bash
+export OPENAI_API_KEY="sk-..."
+cd /workspace/thinkgrasp/ThinkGrasp
+export THINKGRASP_SHOW_MATPLOTLIB=0
+export THINKGRASP_SHOW_OPEN3D=0
+python realarm_upload_server.py
 ```
 
 ## Linting & Formatting
@@ -155,6 +196,15 @@ The main control node (`franka_control2`) creates a multi-threaded executor with
 ### pymoveit2
 
 Python client library (`ros2_ws/src/pymoveit2/`) providing async MoveIt 2 interfaces. Key classes: `MoveIt2` (arm planning/execution), `MoveIt2Gripper`, `MoveIt2Servo`. Used to drive the Panda from Python nodes without writing C++ controllers.
+
+### Client-Server Architecture
+
+The system splits compute across two machines connected over LAN (port 5050):
+
+- **Local PC** — ROS 2 + camera + robot; runs `pymoveit2`, captures RealSense frames, acts as the TCP client
+- **GPU Server** — runs heavy vision/ML models (ThinkGrasp, SAM3, etc.); acts as the TCP server
+
+Wire protocol: each message is `[4-byte big-endian length][payload bytes]`. For image streams the header is `[4-byte meta length][meta JSON][8-byte: rgb_len + depth_len][rgb JPEG bytes][depth uint16 bytes]`. Skeletons in `ClientServerTests/`.
 
 ### ThinkGrasp
 

@@ -3,7 +3,8 @@
     "allow": [
       "Read(//root/**)",
       "Read(//home/**)",
-      "Bash(ls /)"
+      "Bash(ls /)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }
