@@ -7,11 +7,13 @@ find_package(ament_cmake_python REQUIRED)
 
 # Install Python package
 ament_python_install_package(pymoveit2)
+ament_python_install_package(heuristics)
 
 # Install examples
 set(EXAMPLES_DIR examples)
 set(CUSTOM_SCRIPTS_DIR custom_scripts)
 set(THINKGRASP_DIR thinkgrasp)
+set(HEURISTICS_DIR heuristics)
 install(PROGRAMS
     ${EXAMPLES_DIR}/ex_allow_collisions.py
     ${EXAMPLES_DIR}/ex_clear_planning_scene.py
@@ -34,6 +36,9 @@ install(PROGRAMS
     ${THINKGRASP_DIR}/send_grasp_request_realrobot.py
     ${THINKGRASP_DIR}/grasp_pipeline_realrobot.py
     ${THINKGRASP_DIR}/sim_grasp_pipeline_realrobot.py
+    ${HEURISTICS_DIR}/vertical_retrieval.py
+    ${HEURISTICS_DIR}/approach_direction_retrieval.py
+    ${HEURISTICS_DIR}/default_mover.py
     DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -42,6 +47,11 @@ install(FILES
     ${THINKGRASP_DIR}/client.py
     ${THINKGRASP_DIR}/client_realrobot.py
     DESTINATION lib/${PROJECT_NAME}
+)
+
+install(FILES
+    ${HEURISTICS_DIR}/retrieval_config.yaml
+    DESTINATION share/${PROJECT_NAME}/heuristics
 )
 
 # Setup the project
