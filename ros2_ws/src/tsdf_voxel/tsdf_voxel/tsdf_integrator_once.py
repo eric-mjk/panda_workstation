@@ -16,8 +16,10 @@ import rclpy.time
 import tf2_ros
 import yaml
 from cv_bridge import CvBridge
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, Pose, Quaternion, Vector3
 from message_filters import ApproximateTimeSynchronizer, Subscriber
+from moveit_msgs.msg import CollisionObject
+from shape_msgs.msg import Mesh, MeshTriangle
 from rclpy.node import Node
 from rclpy.qos import (
     DurabilityPolicy,
@@ -154,6 +156,16 @@ class TSDFIntegratorOnce(Node):
         self._mesh_pub = self.create_publisher(
             Marker, self._mesh_marker_topic, marker_qos
         )
+        collision_qos = QoSProfile(
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1,
+        )
+        self._collision_pub = self.create_publisher(
+            CollisionObject, '/collision_object', collision_qos
+        )
+        self._collision_object_id = 'tsdf_mesh'
         self._setup_keyboard()
 
         self.get_logger().info('Interactive TSDF debug node started')
@@ -167,7 +179,10 @@ class TSDFIntegratorOnce(Node):
         self.get_logger().info(f'Voxel bounds in {self._world_frame}: {self._voxel_bounds}')
         self.get_logger().info(f'Marker topic: {self._mesh_marker_topic}')
         self.get_logger().info('Press p to integrate one RGBD pair')
-        self.get_logger().info(f'Press m to extract/publish {self._mesh_marker_topic}')
+        self.get_logger().info(
+            f'Press m to extract/publish {self._mesh_marker_topic} and /collision_object'
+        )
+        self.get_logger().info('Press r to remove collision object from planning scene')
 
     def _load_yaml(self, config_path: str) -> dict:
         with open(config_path, 'r', encoding='utf-8') as config_file:
@@ -261,6 +276,8 @@ class TSDFIntegratorOnce(Node):
             self._integrate_latest_rgbd()
         elif key == 'm':
             self._extract_and_publish_mesh()
+        elif key == 'r':
+            self._remove_collision_object()
         elif key == 'q':
             self.get_logger().info('Quit requested')
             self._request_shutdown()
@@ -357,6 +374,12 @@ class TSDFIntegratorOnce(Node):
         self._mesh_pub.publish(marker)
         self.get_logger().info(f'Published mesh marker on {self._mesh_marker_topic}')
 
+        collision_obj = self._mesh_to_collision_object(mesh)
+        self._collision_pub.publish(collision_obj)
+        self.get_logger().info(
+            f'Published collision object "{self._collision_object_id}" to /collision_object'
+        )
+
     def _crop_mesh_to_bounds(self, mesh):
         if self._voxel_bounds is None:
             return mesh
@@ -451,6 +474,42 @@ class TSDFIntegratorOnce(Node):
             ]
 
         return marker
+
+    def _mesh_to_collision_object(self, mesh) -> CollisionObject:
+        vertices = np.asarray(mesh.vertices)
+        triangles = np.asarray(mesh.triangles)
+
+        shape_mesh = Mesh()
+        shape_mesh.vertices = [
+            Point(x=float(v[0]), y=float(v[1]), z=float(v[2])) for v in vertices
+        ]
+        shape_mesh.triangles = [
+            MeshTriangle(vertex_indices=[int(t[0]), int(t[1]), int(t[2])])
+            for t in triangles
+        ]
+
+        identity_pose = Pose()
+        identity_pose.orientation = Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
+
+        obj = CollisionObject()
+        obj.header.frame_id = self._world_frame
+        obj.header.stamp = self.get_clock().now().to_msg()
+        obj.id = self._collision_object_id
+        obj.operation = CollisionObject.ADD
+        obj.meshes = [shape_mesh]
+        obj.mesh_poses = [identity_pose]
+        return obj
+
+    def _remove_collision_object(self) -> None:
+        obj = CollisionObject()
+        obj.header.frame_id = self._world_frame
+        obj.header.stamp = self.get_clock().now().to_msg()
+        obj.id = self._collision_object_id
+        obj.operation = CollisionObject.REMOVE
+        self._collision_pub.publish(obj)
+        self.get_logger().info(
+            f'Removed collision object "{self._collision_object_id}" from planning scene'
+        )
 
     def _setup_keyboard(self) -> None:
         if not sys.stdin.isatty():

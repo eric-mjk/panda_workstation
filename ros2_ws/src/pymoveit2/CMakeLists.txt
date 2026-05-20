@@ -29,6 +29,7 @@ install(PROGRAMS
     ${CUSTOM_SCRIPTS_DIR}/panda_joint_goal.py
     ${CUSTOM_SCRIPTS_DIR}/panda_pose_goal.py
     ${CUSTOM_SCRIPTS_DIR}/panda_ready.py
+    ${CUSTOM_SCRIPTS_DIR}/panda_planner_joint_goal.py
     ${THINKGRASP_DIR}/send_grasp_request.py
     ${THINKGRASP_DIR}/send_grasp_request_realrobot.py
     ${THINKGRASP_DIR}/grasp_pipeline_realrobot.py
