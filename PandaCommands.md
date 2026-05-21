@@ -1,9 +1,15 @@
 ## Get Joint
 python3 /workspace/scriptsget_joints.py
 
+- or
+
+ros2 topic echo /joint_states --once | python3 -c "
+import sys, yaml
+msg = yaml.safe_load(sys.stdin.read().replace('---',''))
+print(msg['position'][:7])
+"
+
 ==============
-
-
 ## Panda Ready
 ros2 run pymoveit2 panda_ready.py --ros-args -p named_state:=ready
 
