@@ -562,12 +562,10 @@ def _to_open3d_depth(depth: np.ndarray) -> np.ndarray:
     if np.issubdtype(depth.dtype, np.floating):
         return np.ascontiguousarray(depth, dtype=np.float32)
 
-    if depth.dtype == np.uint16:
-        return np.ascontiguousarray(depth)
-
-    depth = np.nan_to_num(depth, nan=0.0, posinf=0.0, neginf=0.0)
-    depth = np.clip(depth, 0, np.iinfo(np.uint16).max)
-    return np.ascontiguousarray(depth, dtype=np.uint16)
+    # Cast integer depth to float32 — Open3D's Image constructor rejects uint16
+    # with newer numpy versions due to buffer protocol incompatibility.
+    # Values are preserved exactly; depth_scale still handles unit conversion.
+    return np.ascontiguousarray(depth, dtype=np.float32)
 
 
 def main(args=None):

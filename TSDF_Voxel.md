@@ -22,23 +22,8 @@ ros2 run tsdf_voxel tsdf_integrator_once --ros-args \
   -p tsdf_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/tsdf_debug.yaml
 
 ===============================================================
-
-# Using view candidate
-## Sim
-ros2 run tsdf_voxel view_scan_executor --ros-args \
-  -p camera_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/sim_robot_camera.yaml \
-  -p tsdf_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/tsdf_debug.yaml \
-  -p view_scan_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/view_scan_config.yaml
-
-
-## Real
-ros2 run tsdf_voxel view_scan_executor --ros-args \
-  -p camera_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/real_robot_camera.yaml \
-  -p tsdf_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/tsdf_debug.yaml \
-  -p view_scan_config_file:=/workspace/ros2_ws/src/tsdf_voxel/config/view_scan_config.yaml
-
-
-===============================================================
+python3 /workspace/scripts/run_view_candidates.py
+============================================================
 
 # Start panda planner (moveit planning sceene)
 ros2 run pymoveit2 panda_planner_joint_goal.py --ros-args \
@@ -46,7 +31,7 @@ ros2 run pymoveit2 panda_planner_joint_goal.py --ros-args \
 
 ros2 run pymoveit2 panda_planner_joint_goal.py --ros-args \
   -p planner_id:=PRMkConfigDefault \
-  -p joint_positions:="[0.0, -0.5, 0.0, -2.0, 0.0, 1.5, 0.8]"
+  -p joint_positions:="[0.010833520069456938, 0.2770359245405734, 0.03475776986997473, -2.4844073507571984, 0.011520724211080594, 2.7799502530157776, 2.0290077956688726]"
 
 
 ===============================================================

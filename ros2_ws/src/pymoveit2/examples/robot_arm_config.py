@@ -1,0 +1,57 @@
+import numpy as np
+
+# SCENE
+ROI_X_RANGE = (0.20, 0.75)
+ROI_Y_RANGE = (-0.35, 0.35)
+ROI_Z_RANGE = (-0.05, 0.35)
+GRID_RESOLUTION = 0.01
+PLANE_Z = 0.0
+MIN_DEPTH_M = 0.10
+MAX_DEPTH_M = 1.50
+RVIZ_VISUALIZE_STRIDE = 1
+RVIZ_VISUALIZE_PERIOD = 1
+
+
+# CAM
+CAMERA_SERIAL = "f0221251"
+COLOR_WIDTH = 1280
+COLOR_HEIGHT = 720
+CAM_INTRINSICS = np.array(
+    [ 
+        [906.4620361328125, 0.0, 645.7659912109375], 
+        [0.0, 906.65283203125, 375.2723388671875], 
+        [0.0, 0.0, 1.0]
+    ]
+)
+
+# ROBOT
+PANDA_HAND_LINK = "panda_hand"
+PANDA_GRIPPER_LINK = "panda_hand_tcp"
+
+HOME_JOINTS = [0.0, -0.78539816, 0.0, -2.35619449, 0.0, 1.57079633, 0.78539816]
+ABOVE_JOINTS = [0.0, -0.205, 0.0, -0.951, 0.0, 0.749, 0.783]
+JOINT_LIMITS_LOWER = [-2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175, -2.8973]
+JOINT_LIMITS_UPPER = [2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973]
+
+GRIPPER_TO_EE = np.array(
+	[
+		[1.0, 0.0, 0.0, 0.0],
+		[0.0, 1.0, 0.0, 0.0],
+		[0.0, 0.0, 1.0, -0.1034],
+		[0.0, 0.0, 0.0, 1.0],
+	],
+	dtype=np.float64,
+)
+EE_TO_GRIPPER = np.linalg.inv(GRIPPER_TO_EE)
+
+EE_TO_CAMERA = np.array(
+    [
+        [-0.00655526, -0.999961, 0.00593217, 0.092329],
+        [0.999813, -0.006662, -0.0181578, 0.00308126],
+        [0.0181966, 0.00581203, 0.999818, 0.0622155],
+        [0.0, 0.0, 0.0, 1.0],
+    ],
+    dtype=np.float64,
+)
+CAMERA_TO_EE = np.linalg.inv(EE_TO_CAMERA)
+CAMERA_TO_GRIPPER = CAMERA_TO_EE @ EE_TO_GRIPPER

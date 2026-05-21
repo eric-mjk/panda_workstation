@@ -12,7 +12,7 @@ from pymoveit2.robots import panda as robot
 
 
 DEFAULT_BASE_LINK = "panda_link0"
-DEFAULT_END_EFFECTOR_LINK = "panda_link8"
+DEFAULT_END_EFFECTOR_LINK = "panda_hand_tcp"
 DEFAULT_MOVE_GROUP = "panda_arm"
 
 

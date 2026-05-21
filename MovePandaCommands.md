@@ -18,7 +18,8 @@ ros2 run pymoveit2 panda_gripper_control.py --ros-args -p action:=toggle
 
 ## Panda Joint Goal
 ros2 run pymoveit2 panda_joint_goal.py --ros-args \
-  -p joint_positions:="[0.0, -0.785398, 0.0, -2.356194, 0.0, 1.570796, 0.785398]"
+  -p max_velocity:=0.1 \
+  -p joint_positions:="
 
 
 ## Panda Pose Goal

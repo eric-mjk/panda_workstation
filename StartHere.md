@@ -24,7 +24,7 @@ ros2 launch franka_moveit_config moveit.launch.py use_isaac_sim:=true load_gripp
 ## Real robot
 ros2 launch franka_moveit_config moveit.launch.py robot_ip:=172.16.0.2 load_gripper:=true
 
-
+ros2 launch franka_moveit_config moveit_without_gripper_collision.launch.py robot_ip:=172.16.0.2 load_gripper:=true
 
 # Start ThinkGrasp
 

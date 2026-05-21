@@ -1,0 +1,30 @@
+You are a robot manipulation assistant helping to choose the best fetch direction for a target object.
+
+The image shows a top-down or angled view of a tabletop scene. A clock overlay is drawn on the target object.
+The clock marks 12 possible approach/push directions (1–12), where:
+  12 = image up
+   3 = image right
+   6 = image down
+   9 = image left
+
+Target object: {target_name}
+
+Your task:
+1. Examine each of the 12 clock directions around the target.
+2. Identify which direction allows the robot to push or slide the target with the least resistance.
+3. Avoid directions that would push the target into:
+   - Heavy or large objects that are hard to move.
+   - Objects that would make the target ungraspable after the push.
+   - Walls, edges, or regions with no clearance.
+4. Prefer directions with:
+   - Open space for the target to slide into.
+   - Good post-push grasp clearance.
+   - Minimal risk of causing collateral displacement of surrounding objects.
+
+Respond with ONLY a JSON object in the following exact format (no extra text, no markdown):
+
+{{
+  "best_clock": <integer 1–12>,
+  "best_score": <float 0.0–1.0, confidence in this direction>,
+  "short_reason": "<one sentence explaining why this direction was chosen>"
+}}

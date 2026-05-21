@@ -38,7 +38,6 @@ install(PROGRAMS
     ${THINKGRASP_DIR}/sim_grasp_pipeline_realrobot.py
     ${HEURISTICS_DIR}/vertical_retrieval.py
     ${HEURISTICS_DIR}/approach_direction_retrieval.py
-    ${HEURISTICS_DIR}/default_mover.py
     DESTINATION lib/${PROJECT_NAME}
 )
 
