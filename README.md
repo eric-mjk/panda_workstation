@@ -27,6 +27,26 @@ docker run -it -d \
   -v ~/Eric/panda_workstation:/workspace \
   ericmjk/panda_ws:mod_vanilla
 ```
+for systems with nvidia gpus
+```
+
+```bash
+docker run -it -d \
+  --ipc host --net host --privileged \
+  --gpus all \
+  -v /dev:/dev -v /dev/bus/usb:/dev/bus/usb \
+  --name eric_panda_workstation \
+  -e DISPLAY=$DISPLAY -e QT_X11_NO_MITSHM=1 \
+  -e ROS_DOMAIN_ID=0 \
+  -e RMW_IMPLEMENTATION=rmw_fastrtps_cpp \
+  -e FASTDDS_BUILTIN_TRANSPORTS=UDPv4 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -v ~/.Xauthority:/root/.Xauthority:rw \
+  -e XAUTHORITY=/root/.Xauthority \
+  -v ~/Eric/panda_workstation:/workspace \
+  ericmjk/panda_ws:mod_vanilla
+```
+
 
 First-time build (inside container):
 
