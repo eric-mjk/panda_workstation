@@ -173,8 +173,8 @@ class ActivePerceptionCoordinator(Node):
         self.declare_parameter("camera_frame", "camera_link")
         self.declare_parameter("candidates_json", str(default_candidates_path()))
         self.declare_parameter("camera_config_file", "")
-        self.declare_parameter("output_dir", "/ours_experiment")
-        self.declare_parameter("experiment_name", "ex1")
+        self.declare_parameter("output_dir", "/workspace/ros2_ws/ours_experiment")
+        self.declare_parameter("experiment_name", "ex2")
 
         self.declare_parameter("depth_scale", 4000.0)
         self.declare_parameter("sync_slop", 0.10)

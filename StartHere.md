@@ -17,8 +17,7 @@ ros2 launch realsese_bringup sim_camera.launch.py
 
 
 ## Start MoveIt
-### Fake hardware
+### For Fake hardware
 ros2 launch franka_moveit_config moveit.launch.py use_fake_hardware:=true load_gripper:=true
-
-## Isaac Sim
+## For Isaac Sim
 ros2 launch franka_moveit_config moveit.launch.py use_isaac_sim:=true load_gripper:=true

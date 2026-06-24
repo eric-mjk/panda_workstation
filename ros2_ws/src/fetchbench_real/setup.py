@@ -7,7 +7,7 @@ package_name = "fetchbench_real"
 setup(
     name=package_name,
     version="0.1.0",
-    packages=find_packages(include=["real_active_perception", "real_active_perception.*"]),
+    packages=find_packages(include=["real_active_perception", "real_active_perception.*", "real_offline", "real_offline.*"]),
     data_files=[
         ("share/ament_index/resource_index/packages", [f"resource/{package_name}"]),
         (f"share/{package_name}", ["package.xml", "README.md"]),
@@ -19,7 +19,7 @@ setup(
             "view_candidates/*.png",
         ],
     },
-    install_requires=["setuptools", "PyYAML", "Pillow"],
+    install_requires=["setuptools", "PyYAML", "Pillow", "google-genai"],
     zip_safe=False,
     maintainer="Eric",
     maintainer_email="eric@example.com",
@@ -29,6 +29,7 @@ setup(
     entry_points={
         "console_scripts": [
             "fetchbench_active_perception = real_active_perception.coordinator:main",
+            "fetchbench_offline_pipeline = real_offline.pipeline:main",
         ],
     },
 )

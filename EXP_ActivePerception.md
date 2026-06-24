@@ -1,32 +1,4 @@
 ==============================================
-# Dry Run
-
-## Real robot
-ros2 run fetchbench_real fetchbench_active_perception --ros-args \
-  --params-file /workspace/ros2_ws/src/fetchbench_real/config/active_perception_real.yaml
-## Isaac Sim
-ros2 run fetchbench_real fetchbench_active_perception --ros-args \
-  --params-file /workspace/ros2_ws/src/fetchbench_real/config/active_perception_sim.yaml
-==============================================
-# Check the Output
-
-## Default output
-/ours_experiment/ex1/
-  summary.json
-  occupancy_final.ply
-  views/
-    rgb/
-    depth/
-    depth_preview/
-    intrinsics.json
-    pose.json
-
-Change experiment folder:
-
--p experiment_name:=ex2
-
-Check `summary.json`:
-==============================================
 # Enable Robot Motion
 
 ## Real robot
@@ -50,7 +22,7 @@ p - process latest RGB-D frame, update AP occupancy grid, publish voxel markers
 n - select the next active-perception view
 m - move to the selected view and settle
 v - republish voxel markers
-w - write summary.json and occupancy_final.ply
+w - write and save
 q - quit
 
 With dry_run_motion:=true, m will not move the robot.

@@ -2,8 +2,8 @@ fetchbench_active_perception:
   ros__parameters:
     camera_config_file: /workspace/ros2_ws/src/fetchbench_real/config/real_robot_camera.yaml
     candidates_json: ""
-    output_dir: /ours_experiment
-    experiment_name: ex1
+    output_dir: /workspace/ros2_ws/ours_experiment
+    experiment_name: ex2
 
     capture_timeout_s: 10.0
     tf_timeout_s: 2.0

@@ -1,0 +1,32 @@
+{
+  "Target object": "wooden block(material=plastic)",
+  "Surrounding objects": [
+    "wooden block(material=plastic)",
+    "mustard bottle(material=plastic)",
+    "coffee can(material=metal)",
+    "can(material=metal)",
+    "red box(material=paper)"
+  ],
+  "Physical relationships": "The target block is leaning against another block to its left and supports a mustard bottle on its right. Metal cans and a paper box are located behind and to the side.",
+  "Speed": "slow",
+  "Reason": "The target is in close contact with the left block and appears to be supporting the mustard bottle. Slow retrieval is necessary to minimize destabilizing the pile.",
+  "Direction scores": [
+    0.6,
+    0.4,
+    0.2,
+    0.5,
+    0.8,
+    0.9,
+    0.4,
+    0.2,
+    0.1,
+    0.2,
+    0.6,
+    0.8
+  ],
+  "Best direction reason": "Moving towards 6 o'clock pulls the block outwards toward the camera, sliding it free without directly pushing into the left block or the cans behind it.",
+  "Worst direction reason": "Moving towards 9 o'clock pushes the target directly into the adjacent block on its left, causing an immediate collision.",
+  "elapsed_s": 46.225903272628784,
+  "provider": "gemini",
+  "model": "gemini-3.1-pro-preview"
+}
