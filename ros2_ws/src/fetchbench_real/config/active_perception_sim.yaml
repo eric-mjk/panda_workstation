@@ -1,0 +1,43 @@
+fetchbench_active_perception:
+  ros__parameters:
+    camera_config_file: /workspace/ros2_ws/src/fetchbench_real/config/sim_robot_camera.yaml
+    candidates_json: ""
+    output_dir: /ours_experiment
+    experiment_name: ex1
+
+    capture_timeout_s: 10.0
+    tf_timeout_s: 2.0
+    settle_time_s: 0.8
+
+    top_k: 100
+    max_steps: 15
+    min_gain: 0.000001
+    ig_with_raycast: false
+    max_scoring_voxels: 1200
+    unresolved_target_penalty: 0.3
+
+    x_range: [0.20, 0.75]
+    y_range: [-0.35, 0.35]
+    z_range: [-0.05, 0.35]
+    voxel_size_m: 0.02
+    z_plane_m: 0.0
+    min_depth_m: 0.10
+    pixel_stride: 8
+    min_component_voxels: 5
+
+    dry_run_motion: true
+    keyboard_control: true
+    move_timeout_s: 120.0
+    pymoveit2_package: pymoveit2
+    joint_goal_executable: panda_joint_goal.py
+    write_final_ply: true
+    include_unknown_in_ply: true
+
+    publish_voxel_markers: true
+    publish_occupied_voxels: true
+    publish_unknown_voxels: true
+    publish_free_voxels: true
+    max_marker_voxels: 20000
+    voxel_marker_stride: 1
+    voxel_marker_topic_prefix: /fetchbench_active_perception
+    next_best_view_marker_size_m: 0.06

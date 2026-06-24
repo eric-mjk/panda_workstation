@@ -22,7 +22,7 @@ ros2 run tsdf_voxel tsdf_integrator_once --ros-args \
 
 
 Then use the keyboard:
-p — move to next candidate, settle 1s, integrate TSDF frame
+p — move to next candidate, settle for 1 second, integrate TSDF frame
 m — extract and publish mesh
 r — remove collision object
 q — quit

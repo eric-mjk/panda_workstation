@@ -1,0 +1,6 @@
+numpy
+opencv-python
+google-genai
+python-dotenv
+matplotlib
+tqdm
