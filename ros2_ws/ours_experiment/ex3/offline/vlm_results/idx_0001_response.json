@@ -1,0 +1,33 @@
+{
+  "Target object": "wooden-textured wedge(material=plastic)",
+  "Surrounding objects": [
+    "yellow mustard bottle(material=plastic)",
+    "red box(material=paper)",
+    "soup can(material=metal)",
+    "sugar box(material=paper)",
+    "coffee can(material=metal)",
+    "brown corrugated object(material=rubber)"
+  ],
+  "Physical relationships": "The target wedge rests on the surface and acts as a structural support for the tilted red box and mustard bottle, which in turn support the soup can. A brown corrugated object blocks the wedge's right side.",
+  "Speed": "slow",
+  "Reason": "The wedge is a load-bearing support for multiple objects; moving it slowly allows the supported pile to drop and settle gently, avoiding a violent and unpredictable collapse.",
+  "Direction scores": [
+    0.0,
+    0.0,
+    0.0,
+    0.2,
+    0.6,
+    0.7,
+    0.6,
+    0.3,
+    0.1,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "Best direction reason": "6 o'clock pulls the wedge directly forward into empty space, avoiding a direct collision with the brown object to the right and preventing upward force against the pile it supports.",
+  "Worst direction reason": "12 o'clock pushes the wedge directly backwards into the red box and mustard bottle, which would aggressively push into the supported pile and cause immediate heavy collisions.",
+  "elapsed_s": 52.69126486778259,
+  "provider": "gemini",
+  "model": "gemini-3.1-pro-preview"
+}

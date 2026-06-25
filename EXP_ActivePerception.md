@@ -11,7 +11,7 @@ ros2 run fetchbench_real fetchbench_active_perception --ros-args \
 ros2 run fetchbench_real fetchbench_active_perception --ros-args \
   --params-file /workspace/ros2_ws/src/fetchbench_real/config/active_perception_sim.yaml \
   -p dry_run_motion:=false \
-  -p experiment_name:=ex2 \
+  -p experiment_name:=ex3 \
   -p max_steps:=4
 =============================================
 

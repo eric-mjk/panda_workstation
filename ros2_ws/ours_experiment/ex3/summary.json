@@ -1,0 +1,211 @@
+{
+  "format": "fetchbench_real_active_perception_v1",
+  "motion_mode": "joint_goals",
+  "stop_reason": "keyboard_quit",
+  "output_root": "/workspace/ros2_ws/ours_experiment",
+  "experiment_name": "ex3",
+  "candidates_json": "/workspace/ros2_ws/install/fetchbench_real/lib/python3.10/site-packages/real_active_perception/view_candidates/view_candidates.json",
+  "num_candidates_loaded": 100,
+  "used_candidate_indices": [
+    74
+  ],
+  "planned_moves": [
+    {
+      "step": 1,
+      "candidate_index": 74,
+      "candidate_rank": 75,
+      "expected_gain": {
+        "weighted_sum": 2416.480679672316,
+        "visible_unknown_voxels": 1077,
+        "mean_distance": 0.45912486168111016
+      },
+      "joint_angles": [
+        0.013582835462706383,
+        -1.2678588456655866,
+        1.5401390248843194,
+        -2.916754220308593,
+        0.5159784349358576,
+        2.3192751033473735,
+        1.3389320551256705
+      ],
+      "dry_run": false
+    }
+  ],
+  "views": [
+    {
+      "view_index": 0,
+      "tag": "initial",
+      "candidate_index": null,
+      "candidate_rank": null,
+      "move_success": true,
+      "camera_frame": "l515_camera",
+      "camera_matrix": [
+        [
+          0.0017045815835211586,
+          -0.9999965464208161,
+          -0.0020003869790855343,
+          0.4069898813165813
+        ],
+        [
+          -0.9999985427822594,
+          -0.001704766191598095,
+          9.05847118522552e-05,
+          0.0009052573164743144
+        ],
+        [
+          -9.39945911028376e-05,
+          0.002000229655054568,
+          -0.9999979951211624,
+          0.5360165193469574
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "expected_gain": null,
+      "grid_counts": {
+        "free": 4532,
+        "unknown": 11899,
+        "occupied": 3169,
+        "checked": 5359,
+        "total": 19600
+      },
+      "occupancy_update_stats": {
+        "valid_depth_samples": 32400,
+        "inside_roi_samples": 31134,
+        "unique_endpoint_voxels": 893
+      },
+      "scored_unknown_voxels": 8846,
+      "score_mean": 0.4484671950340271,
+      "rgb_shape_hw": [
+        1080,
+        1920
+      ],
+      "depth_shape_hw": [
+        1080,
+        1920
+      ],
+      "sync_index": 14,
+      "saved_view": {
+        "view_index": 0,
+        "rgb_path": "/workspace/ros2_ws/ours_experiment/ex3/views/rgb/0000.png",
+        "depth_path": "/workspace/ros2_ws/ours_experiment/ex3/views/depth/0000.png",
+        "depth_preview_path": "/workspace/ros2_ws/ours_experiment/ex3/views/depth_preview/0000.png",
+        "pose_json": "/workspace/ros2_ws/ours_experiment/ex3/views/pose.json",
+        "intrinsics_json": "/workspace/ros2_ws/ours_experiment/ex3/views/intrinsics.json"
+      }
+    },
+    {
+      "view_index": 1,
+      "tag": "manual_001",
+      "candidate_index": 74,
+      "candidate_rank": 75,
+      "move_success": true,
+      "camera_frame": "l515_camera",
+      "camera_matrix": [
+        [
+          -0.030240436677117843,
+          -0.7474698959305103,
+          0.6636070152335714,
+          0.27517965377186254
+        ],
+        [
+          -0.816517647846882,
+          -0.36446485717576804,
+          -0.44773239623511973,
+          0.2787768941025411
+        ],
+        [
+          0.5765279236465244,
+          -0.555386462349848,
+          -0.5993007848270753,
+          0.30258353146750405
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "expected_gain": {
+        "weighted_sum": 2416.480679672316,
+        "visible_unknown_voxels": 1077,
+        "mean_distance": 0.45912486168111016
+      },
+      "grid_counts": {
+        "free": 5210,
+        "unknown": 11125,
+        "occupied": 3265,
+        "checked": 6146,
+        "total": 19600
+      },
+      "occupancy_update_stats": {
+        "valid_depth_samples": 32400,
+        "inside_roi_samples": 23103,
+        "unique_endpoint_voxels": 525
+      },
+      "scored_unknown_voxels": 8348,
+      "score_mean": 0.3529406487941742,
+      "rgb_shape_hw": [
+        1080,
+        1920
+      ],
+      "depth_shape_hw": [
+        1080,
+        1920
+      ],
+      "sync_index": 233,
+      "saved_view": {
+        "view_index": 1,
+        "rgb_path": "/workspace/ros2_ws/ours_experiment/ex3/views/rgb/0001.png",
+        "depth_path": "/workspace/ros2_ws/ours_experiment/ex3/views/depth/0001.png",
+        "depth_preview_path": "/workspace/ros2_ws/ours_experiment/ex3/views/depth_preview/0001.png",
+        "pose_json": "/workspace/ros2_ws/ours_experiment/ex3/views/pose.json",
+        "intrinsics_json": "/workspace/ros2_ws/ours_experiment/ex3/views/intrinsics.json"
+      }
+    }
+  ],
+  "views_dir": "/workspace/ros2_ws/ours_experiment/ex3/views",
+  "pose_json": "/workspace/ros2_ws/ours_experiment/ex3/views/pose.json",
+  "intrinsics_json": "/workspace/ros2_ws/ours_experiment/ex3/views/intrinsics.json",
+  "final_grid_counts": {
+    "free": 5210,
+    "unknown": 11125,
+    "occupied": 3265,
+    "checked": 6146,
+    "total": 19600
+  },
+  "roi": {
+    "x_range": [
+      0.2,
+      0.75
+    ],
+    "y_range": [
+      -0.35,
+      0.35
+    ],
+    "z_range": [
+      -0.05,
+      0.35
+    ],
+    "voxel_size_m": 0.02
+  },
+  "depth_limits_m": {
+    "min": 0.1,
+    "max": 10.0,
+    "depth_scale": 1.0
+  },
+  "topics": {
+    "rgb": "/isaac_rgb",
+    "depth": "/isaac_depth",
+    "camera_info": "/camera/color/camera_info"
+  },
+  "frames": {
+    "world_frame": "panda_link0",
+    "camera_frame": "l515_camera"
+  }
+}

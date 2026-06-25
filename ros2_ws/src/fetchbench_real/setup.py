@@ -7,7 +7,14 @@ package_name = "fetchbench_real"
 setup(
     name=package_name,
     version="0.1.0",
-    packages=find_packages(include=["real_active_perception", "real_active_perception.*", "real_offline", "real_offline.*"]),
+    packages=find_packages(include=[
+        "real_active_perception",
+        "real_active_perception.*",
+        "real_offline",
+        "real_offline.*",
+        "real_execute",
+        "real_execute.*",
+    ]),
     data_files=[
         ("share/ament_index/resource_index/packages", [f"resource/{package_name}"]),
         (f"share/{package_name}", ["package.xml", "README.md"]),
@@ -30,6 +37,8 @@ setup(
         "console_scripts": [
             "fetchbench_active_perception = real_active_perception.coordinator:main",
             "fetchbench_offline_pipeline = real_offline.pipeline:main",
+            "fetchbench_pull_best_direction = real_execute.pull_best_direction:main",
+            "fetchbench_publish_ply_visualization = real_execute.publish_ply_visualization:main",
         ],
     },
 )
