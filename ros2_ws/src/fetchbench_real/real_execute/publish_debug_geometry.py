@@ -13,15 +13,6 @@ from std_msgs.msg import ColorRGBA
 from visualization_msgs.msg import Marker, MarkerArray
 
 
-STATE_FILTERS = {
-    "all": {-1, 0, 1},
-    "free": {-1},
-    "unknown": {0},
-    "occupied": {1},
-    "known": {-1, 1},
-}
-
-
 def _read_ascii_ply(path: Path) -> tuple[list[str], list[list[float]], list[list[int]]]:
     lines = path.read_text(encoding="utf-8").splitlines()
     vertex_count = 0
@@ -92,28 +83,22 @@ class DebugGeometryPublisher(Node):
         self.declare_parameter("output_root", "/workspace/ros2_ws/ours_experiment")
         self.declare_parameter("experiment_name", "ex1")
         self.declare_parameter("frame_id", "panda_link0")
-        self.declare_parameter("occupancy_states", "occupied")
         self.declare_parameter("voxel_size_m", 0.02)
         self.declare_parameter("debug_point_size_m", 0.012)
         self.declare_parameter("direction_line_width_m", 0.012)
         self.declare_parameter("publish_period_sec", 1.0)
-        self.declare_parameter("occupancy_ply", "")
         self.declare_parameter("tsdf_ply", "")
         self.declare_parameter("target_points_ply", "")
         self.declare_parameter("scoring_points_ply", "")
-        self.declare_parameter("sweep_ply", "")
-        self.declare_parameter("direction_ply", "")
         self.declare_parameter("result_json", "")
 
         qos = QoSProfile(depth=1)
         qos.reliability = ReliabilityPolicy.RELIABLE
         qos.durability = DurabilityPolicy.TRANSIENT_LOCAL
 
-        self._occupancy_pub = self.create_publisher(Marker, "/fetchbench_debug/original_occupancy", qos)
         self._tsdf_pub = self.create_publisher(Marker, "/fetchbench_debug/tsdf_without_target", qos)
         self._target_points_pub = self.create_publisher(Marker, "/fetchbench_debug/target_surface_points", qos)
         self._scoring_points_pub = self.create_publisher(Marker, "/fetchbench_debug/scoring_points_100", qos)
-        self._sweep_pub = self.create_publisher(Marker, "/fetchbench_debug/sweep_points", qos)
         self._direction_pub = self.create_publisher(MarkerArray, "/fetchbench_execute/best_direction_set", qos)
 
         self._markers = self._build_markers()
@@ -190,43 +175,69 @@ class DebugGeometryPublisher(Node):
         self.get_logger().info(f"Loaded {ns}: {path} points={len(marker.points)}")
         return marker
 
-    def _direction_marker_array(self, path: Path, result_json: Path) -> MarkerArray:
+    def _arrow_marker(
+        self,
+        *,
+        ns: str,
+        marker_id: int,
+        start: Point,
+        direction: list[float],
+        color: tuple[int, int, int, float],
+        length_m: float = 0.20,
+    ) -> Marker:
+        norm = sum(float(v) * float(v) for v in direction) ** 0.5
+        if norm <= 1e-12:
+            return self._delete_marker(ns, marker_id)
+        end = _point(
+            start.x + float(length_m) * float(direction[0]) / norm,
+            start.y + float(length_m) * float(direction[1]) / norm,
+            start.z + float(length_m) * float(direction[2]) / norm,
+        )
+        marker = Marker()
+        self._stamp(marker)
+        marker.ns = ns
+        marker.id = marker_id
+        marker.type = Marker.ARROW
+        marker.action = Marker.ADD
+        marker.pose.orientation.w = 1.0
+        marker.points.append(start)
+        marker.points.append(end)
+        width = float(self.get_parameter("direction_line_width_m").value)
+        marker.scale.x = width
+        marker.scale.y = width * 2.8
+        marker.scale.z = width * 2.2
+        marker.color = _color(*color)
+        marker.lifetime = Duration(sec=0, nanosec=0)
+        return marker
+
+    def _direction_marker_array(self, result_json: Path) -> MarkerArray:
         array = MarkerArray()
-        if not path.is_file():
-            self.get_logger().warn(f"Direction PLY does not exist: {path}")
-            array.markers.append(self._delete_marker("fetchbench_best_direction_ply", 0))
+        delete_specs = (
+            ("fetchbench_geometry_direction", 10),
+            ("fetchbench_vlm_direction", 11),
+            ("fetchbench_aggregate_direction", 12),
+        )
+        array.markers.append(self._delete_marker("fetchbench_best_direction_ply", 0))
+        if not result_json.is_file():
+            self.get_logger().warn(f"Direction JSON does not exist: {result_json}")
+            for ns, marker_id in delete_specs:
+                array.markers.append(self._delete_marker(ns, marker_id))
             array.markers.append(self._delete_marker("fetchbench_object_point", 1))
             return array
 
-        properties, rows, edges = _read_ascii_ply(path)
-        vertices = [_point(_field(row, properties, "x"), _field(row, properties, "y"), _field(row, properties, "z")) for row in rows]
+        try:
+            data: dict[str, Any] = json.loads(result_json.read_text(encoding="utf-8"))
+        except (OSError, TypeError, ValueError) as exc:
+            self.get_logger().warn(f"Could not load direction JSON: {exc}")
+            for ns, marker_id in delete_specs:
+                array.markers.append(self._delete_marker(ns, marker_id))
+            array.markers.append(self._delete_marker("fetchbench_object_point", 1))
+            return array
 
-        line = Marker()
-        self._stamp(line)
-        line.ns = "fetchbench_best_direction_ply"
-        line.id = 0
-        line.type = Marker.LINE_LIST
-        line.action = Marker.ADD
-        line.pose.orientation.w = 1.0
-        line.scale.x = float(self.get_parameter("direction_line_width_m").value)
-        line.color = _color(255, 0, 0, 1.0)
-        line.lifetime = Duration(sec=0, nanosec=0)
-        for edge in edges:
-            if len(edge) < 2:
-                continue
-            if 0 <= edge[0] < len(vertices) and 0 <= edge[1] < len(vertices):
-                line.points.append(vertices[edge[0]])
-                line.points.append(vertices[edge[1]])
-
-        object_point = vertices[0] if vertices else None
-        if result_json.is_file():
-            try:
-                data: dict[str, Any] = json.loads(result_json.read_text(encoding="utf-8"))
-                value = data.get("grasp_position_world")
-                if isinstance(value, list) and len(value) == 3:
-                    object_point = _point(float(value[0]), float(value[1]), float(value[2]))
-            except (OSError, TypeError, ValueError) as exc:
-                self.get_logger().warn(f"Could not load object point: {exc}")
+        value = data.get("grasp_position_world")
+        object_point = None
+        if isinstance(value, list) and len(value) == 3:
+            object_point = _point(float(value[0]), float(value[1]), float(value[2]))
 
         if object_point is not None:
             sphere = Marker()
@@ -244,25 +255,36 @@ class DebugGeometryPublisher(Node):
             sphere.lifetime = Duration(sec=0, nanosec=0)
             array.markers.append(sphere)
 
-        array.markers.append(line)
-        self.get_logger().info(f"Loaded output direction: {path}")
+        if object_point is None:
+            self.get_logger().warn(f"No grasp_position_world in {result_json}")
+            return array
+
+        specs = (
+            ("fetchbench_geometry_direction", 10, "geometry_only_direction", (0, 220, 80, 1.0)),
+            ("fetchbench_vlm_direction", 11, "vlm_only_direction", (0, 120, 255, 1.0)),
+            ("fetchbench_aggregate_direction", 12, "aggregate_direction", (255, 40, 40, 1.0)),
+        )
+        for ns, marker_id, key, color in specs:
+            direction = data.get(key)
+            if isinstance(direction, list) and len(direction) == 3:
+                array.markers.append(
+                    self._arrow_marker(
+                        ns=ns,
+                        marker_id=marker_id,
+                        start=object_point,
+                        direction=[float(v) for v in direction],
+                        color=color,
+                    )
+                )
+            else:
+                array.markers.append(self._delete_marker(ns, marker_id))
+
+        self.get_logger().info(f"Loaded output directions: {result_json}")
         return array
 
     def _build_markers(self) -> dict[str, Marker | MarkerArray]:
-        exp = self._exp_dir()
-        debug = exp / "directions" / "debug_geometry"
-        state_filter = STATE_FILTERS.get(str(self.get_parameter("occupancy_states").value), {1})
         point_size = float(self.get_parameter("debug_point_size_m").value)
         return {
-            "occupancy": self._point_marker(
-                path=self._path_param("occupancy_ply", "occupancy_grid.ply"),
-                ns="fetchbench_original_occupancy",
-                marker_id=0,
-                color=(255, 160, 40, 0.8),
-                scale=float(self.get_parameter("voxel_size_m").value),
-                use_vertex_colors=True,
-                states=state_filter,
-            ),
             "tsdf": self._point_marker(
                 path=self._path_param("tsdf_ply", "directions/debug_geometry/tsdf_without_target.ply"),
                 ns="fetchbench_tsdf_without_target",
@@ -287,22 +309,15 @@ class DebugGeometryPublisher(Node):
                 scale=point_size * 1.8,
                 use_vertex_colors=True,
             ),
-            "sweep": self._point_marker(
-                path=self._path_param("sweep_ply", "directions/debug_geometry/sweep_aggregate_direction.ply"),
-                ns="fetchbench_sweep_points",
-                marker_id=0,
-                color=(255, 255, 255, 1.0),
-                scale=point_size,
-                use_vertex_colors=True,
-            ),
+            # Sweep-point visualization is intentionally disabled here; it is too dense for routine RViz debugging.
+            # To inspect sweep PLYs, use an offline PLY viewer directly on directions/debug_geometry/sweep_*.ply.
             "direction": self._direction_marker_array(
-                self._path_param("direction_ply", "directions/aggregate_direction.ply"),
                 self._path_param("result_json", "directions/final_3d_direction.json"),
             ),
         }
 
     def _publish(self) -> None:
-        for key in ("occupancy", "tsdf", "target", "scoring", "sweep"):
+        for key in ("tsdf", "target", "scoring"):
             marker = self._markers[key]
             if isinstance(marker, Marker):
                 self._stamp(marker)
@@ -311,11 +326,9 @@ class DebugGeometryPublisher(Node):
             for marker in direction.markers:
                 self._stamp(marker)
             self._direction_pub.publish(direction)
-        self._occupancy_pub.publish(self._markers["occupancy"])
         self._tsdf_pub.publish(self._markers["tsdf"])
         self._target_points_pub.publish(self._markers["target"])
         self._scoring_points_pub.publish(self._markers["scoring"])
-        self._sweep_pub.publish(self._markers["sweep"])
 
 
 def main() -> None:

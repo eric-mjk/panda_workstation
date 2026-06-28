@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import yaml
 from PIL import Image, ImageDraw
 
 try:
@@ -67,6 +68,11 @@ TSDF_VOXEL_SIZE_M = 0.01
 TSDF_TRUNCATION_M = 0.04
 TSDF_TARGET_MASK_DILATE_PX = 0
 TSDF_EXCLUDE_BACKGROUND = False
+TSDF_FALLBACK_BOUNDS = {
+    "x": [0.1, 1.0],
+    "y": [-0.5, 0.5],
+    "z": [-0.1, 1.0],
+}
 GEO_TARGET_POINT_STRIDE = 4
 GEO_TARGET_POINT_MAX_POINTS = 2500
 GEO_SWEEP_START_M = 0.00
@@ -86,6 +92,73 @@ def _load_json(path: Path) -> dict[str, Any]:
 def _write_json(path: Path, data: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+
+def _resolve_tsdf_config_file(config_file: str | None) -> Path | None:
+    if config_file:
+        path = Path(config_file).expanduser()
+        return path if path.is_file() else None
+
+    candidates: list[Path] = []
+    env_path = os.environ.get("FETCHBENCH_TSDF_CONFIG", "")
+    if env_path:
+        candidates.append(Path(env_path).expanduser())
+
+    candidates.extend(
+        [
+            Path("/workspace/ros2_ws/src/fetchbench_real/config/tsdf_debug.yaml"),
+            Path.cwd() / "src/fetchbench_real/config/tsdf_debug.yaml",
+            Path.cwd() / "ros2_ws/src/fetchbench_real/config/tsdf_debug.yaml",
+            Path(__file__).resolve().parents[1] / "config/tsdf_debug.yaml",
+        ]
+    )
+
+    try:
+        from ament_index_python.packages import get_package_share_directory
+
+        candidates.append(Path(get_package_share_directory("fetchbench_real")) / "config/tsdf_debug.yaml")
+    except Exception:
+        pass
+
+    for path in candidates:
+        if path.is_file():
+            return path
+    return None
+
+
+def _load_tsdf_bounds(config_file: str | None = None) -> tuple[dict[str, list[float]], str]:
+    path = _resolve_tsdf_config_file(config_file)
+    fallback = {axis: [float(v[0]), float(v[1])] for axis, v in TSDF_FALLBACK_BOUNDS.items()}
+    if path is None:
+        return fallback, "fallback"
+
+    with path.open("r", encoding="utf-8") as f:
+        doc = yaml.safe_load(f) or {}
+    params = doc.get("tsdf_integrator", {}).get("ros__parameters", {})
+    bounds = params.get("voxel_bounds")
+    if not isinstance(bounds, dict):
+        return fallback, str(path)
+
+    parsed: dict[str, list[float]] = {}
+    for axis in ("x", "y", "z"):
+        raw = bounds.get(axis)
+        if not isinstance(raw, (list, tuple)) or len(raw) != 2:
+            return fallback, str(path)
+        lo, hi = float(raw[0]), float(raw[1])
+        parsed[axis] = [min(lo, hi), max(lo, hi)]
+    return parsed, str(path)
+
+
+def _crop_open3d_mesh_to_bounds(mesh: Any, bounds: dict[str, list[float]] | None) -> Any:
+    if bounds is None:
+        return mesh
+    import open3d as o3d
+
+    bbox = o3d.geometry.AxisAlignedBoundingBox(
+        min_bound=np.asarray([bounds["x"][0], bounds["y"][0], bounds["z"][0]], dtype=np.float64),
+        max_bound=np.asarray([bounds["x"][1], bounds["y"][1], bounds["z"][1]], dtype=np.float64),
+    )
+    return mesh.crop(bbox)
 
 
 def _resolve_experiment_dir(args: argparse.Namespace) -> Path:
@@ -755,6 +828,8 @@ def _build_tsdf_volume(
     target_class_id: int | None,
     background_class_id: int | None,
     exclude_background: bool = TSDF_EXCLUDE_BACKGROUND,
+    bounds: dict[str, list[float]] | None = None,
+    bounds_source: str = "",
 ) -> dict[str, Any]:
     try:
         import open3d as o3d
@@ -810,12 +885,19 @@ def _build_tsdf_volume(
         raise RuntimeError("No depth images were integrated into the TSDF volume.")
 
     mesh = volume.extract_triangle_mesh()
+    mesh = _crop_open3d_mesh_to_bounds(mesh, bounds)
     if len(mesh.vertices) == 0:
-        raise RuntimeError("Open3D TSDF produced an empty mesh.")
+        raise RuntimeError("Open3D TSDF produced an empty mesh after workspace bounds crop.")
     tmesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
     scene = o3d.t.geometry.RaycastingScene()
     _ = scene.add_triangles(tmesh)
-    return {"scene": scene, "mesh": mesh, "integrated_views": integrated}
+    return {
+        "scene": scene,
+        "mesh": mesh,
+        "integrated_views": integrated,
+        "bounds": bounds,
+        "bounds_source": bounds_source,
+    }
 
 
 def _query_open3d_distance(tsdf_data: dict[str, Any], points: np.ndarray) -> np.ndarray:
@@ -859,6 +941,8 @@ def _geometry_scores_from_tsdf(
         "tsdf_voxel_size_m": float(TSDF_VOXEL_SIZE_M),
         "tsdf_truncation_m": float(TSDF_TRUNCATION_M),
         "tsdf_exclude_background": bool(TSDF_EXCLUDE_BACKGROUND),
+        "tsdf_bounds": tsdf_data.get("bounds"),
+        "tsdf_bounds_source": tsdf_data.get("bounds_source", ""),
         "sweep_start_m": float(GEO_SWEEP_START_M),
         "sweep_end_m": float(GEO_SWEEP_END_M),
         "sweep_num_steps": int(GEO_SWEEP_NUM_STEPS),
@@ -984,6 +1068,8 @@ def _fuse_direction(
     class_dir: Path | None,
     target_class_id: int | None,
     background_class_id: int | None,
+    tsdf_bounds: dict[str, list[float]] | None = None,
+    tsdf_bounds_source: str = "",
     views_dir: Path | None = None,
     output_dir: Path | None = None,
 ) -> dict[str, Any]:
@@ -1020,6 +1106,8 @@ def _fuse_direction(
             target_class_id=target_class_id,
             background_class_id=background_class_id,
             exclude_background=TSDF_EXCLUDE_BACKGROUND,
+            bounds=tsdf_bounds,
+            bounds_source=tsdf_bounds_source,
         )
         geometry_scores, geometry_meta, geometry_debug = _geometry_scores_from_tsdf(
             candidate_dirs,
@@ -1300,6 +1388,7 @@ def run_direction_stage(args: argparse.Namespace) -> dict[str, Any]:
         target_class_id = int(prep_doc.get("target_class_id", 1))
     if background_class_id is None:
         background_class_id = int(prep_doc.get("background_class_id", 0))
+    tsdf_bounds, tsdf_bounds_source = _load_tsdf_bounds(str(args.tsdf_config_file or ""))
 
     if not bool(args.skip_geometry) and class_dir is None:
         raise RuntimeError(
@@ -1327,6 +1416,8 @@ def run_direction_stage(args: argparse.Namespace) -> dict[str, Any]:
         class_dir=class_dir,
         target_class_id=target_class_id,
         background_class_id=background_class_id,
+        tsdf_bounds=tsdf_bounds,
+        tsdf_bounds_source=tsdf_bounds_source,
         views_dir=views_dir,
         output_dir=exp_dir / "directions",
     )
@@ -1354,6 +1445,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--class-dir", default="", help="Optional class-mask directory. Defaults to <experiment>/masks, then legacy <views>/class.")
     parser.add_argument("--target-class-id", type=int, default=None, help="Optional target class id for sim-equivalent TSDF masking/scoring.")
     parser.add_argument("--background-class-id", type=int, default=None, help="Optional background class id for sim-equivalent TSDF masking.")
+    parser.add_argument("--tsdf-config-file", default="", help="Optional FetchBench TSDF yaml with voxel_bounds. Defaults to fetchbench_real/config/tsdf_debug.yaml.")
     parser.add_argument("--prepare-only", action="store_true", help="Only write marked VLM input images and metadata")
     return parser.parse_args()
 
