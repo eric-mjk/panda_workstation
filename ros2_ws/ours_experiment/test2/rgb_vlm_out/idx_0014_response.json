@@ -1,0 +1,31 @@
+{
+  "Target object": "mustard bottle(material=plastic)",
+  "Surrounding objects": [
+    "Cheez-It box(material=paper)",
+    "soup can(material=metal)",
+    "wooden block(material=paper)"
+  ],
+  "Physical relationships": "The mustard bottle is resting on top of the Cheez-It box, with the soup can lying against its upper-left side.",
+  "Speed": "slow",
+  "Reason": "Slow retrieval prevents dragging the underlying cardboard box and avoids knocking the adjacent soup can.",
+  "Direction scores": [
+    0.8,
+    0.9,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.9,
+    0.7,
+    0.3,
+    0.1,
+    0.2,
+    0.5
+  ],
+  "Best direction reason": "Moving right and down (3 to 6 o'clock) takes the bottle into empty space, safely away from all other objects.",
+  "Worst direction reason": "Moving top-left (10 o'clock) drives the bottle directly into the adjacent soup can, which would displace it.",
+  "elapsed_s": 32.7949013710022,
+  "provider": "gemini",
+  "model": "gemini-3.1-pro-preview",
+  "image_rotated_180": false
+}

@@ -38,6 +38,17 @@ from .core import (
 )
 
 
+def _scale_intrinsics_matrix(intrinsics: np.ndarray, width: int, height: int, base_width: int, base_height: int) -> np.ndarray:
+    scaled = np.asarray(intrinsics, dtype=np.float64).copy()
+    sx = float(width) / max(float(base_width), 1.0)
+    sy = float(height) / max(float(base_height), 1.0)
+    scaled[0, 0] *= sx
+    scaled[1, 1] *= sy
+    scaled[0, 2] *= sx
+    scaled[1, 2] *= sy
+    return scaled
+
+
 @dataclass
 class CaptureBundle:
     rgb_msg: Image
@@ -132,10 +143,10 @@ class ActivePerceptionCoordinator(Node):
         self._experiment_name = str(self.get_parameter("experiment_name").value).strip()
         self._output_dir = self._output_root / self._experiment_name if self._experiment_name else self._output_root
         self._output_dir.mkdir(parents=True, exist_ok=True)
-        self._views_dir = self._output_dir / "views"
-        self._rgb_dir = self._views_dir / "rgb"
-        self._depth_dir = self._views_dir / "depth"
-        self._depth_preview_dir = self._views_dir / "depth_preview"
+        self._views_dir = self._output_dir
+        self._rgb_dir = self._output_dir / "rgb"
+        self._depth_dir = self._output_dir / "depth"
+        self._depth_preview_dir = self._output_dir / "depth_preview"
         for directory in (self._rgb_dir, self._depth_dir, self._depth_preview_dir):
             directory.mkdir(parents=True, exist_ok=True)
 
@@ -181,6 +192,7 @@ class ActivePerceptionCoordinator(Node):
         self.declare_parameter("capture_timeout_s", 10.0)
         self.declare_parameter("tf_timeout_s", 2.0)
         self.declare_parameter("settle_time_s", 0.8)
+        self.declare_parameter("capture_buffer_s", 2.0)
 
         self.declare_parameter("top_k", 100)
         self.declare_parameter("max_steps", 15)
@@ -295,19 +307,41 @@ class ActivePerceptionCoordinator(Node):
             self._write_outputs()
 
     def _run_automatic(self) -> None:
-        initial = self._wait_for_new_capture()
-        self._capture_and_update(initial, tag="initial", candidate_idx=None, expected_gain=None, move_success=True)
+        target_captures = self._target_capture_count()
+        self._capture_with_buffer(tag="initial", candidate_idx=None, expected_gain=None, move_success=True)
+        if len(self._view_records) >= target_captures:
+            self._stop_reason = "max_steps_reached"
+            return
         if bool(self.get_parameter("dry_run_motion").value):
             self.get_logger().warn("dry_run_motion=true: selecting one next view and stopping before robot motion")
             self._select_and_optionally_move(step_idx=1, dry_run_stop=True)
         else:
-            max_steps = int(self.get_parameter("max_steps").value)
-            for step_idx in range(1, max(0, max_steps) + 1):
+            remaining_captures = max(0, target_captures - len(self._view_records))
+            for step_idx in range(1, remaining_captures + 1):
                 keep_going = self._select_and_optionally_move(step_idx=step_idx, dry_run_stop=False)
                 if not keep_going:
                     break
+                if len(self._view_records) >= target_captures:
+                    break
             if self._stop_reason == "not_started":
                 self._stop_reason = "max_steps_reached"
+
+    def _target_capture_count(self) -> int:
+        return 1 + max(0, int(self.get_parameter("max_steps").value))
+
+    def _stop_if_capture_limit_reached(self) -> bool:
+        if len(self._view_records) < self._target_capture_count():
+            return False
+        if self._stop_reason == "not_started":
+            self._stop_reason = "max_steps_reached"
+        self._interactive_quit_requested = True
+        self._pending_candidate_idx = None
+        self._pending_candidate_meta = None
+        self._pending_candidate_step = None
+        self.get_logger().info(
+            f"[stop] reached max_steps capture limit: {len(self._view_records)}/{self._target_capture_count()}"
+        )
+        return True
 
     def _run_keyboard_controlled(self) -> None:
         self._setup_keyboard()
@@ -336,6 +370,34 @@ class ActivePerceptionCoordinator(Node):
             f"rgbd_pairs_with_info={self._synced_count}, "
             f"rgbd_pairs_without_info={self._rgbd_without_info_count}."
         )
+
+    def _capture_with_buffer(
+        self,
+        tag: str,
+        candidate_idx: int | None,
+        expected_gain: dict | None,
+        move_success: bool,
+    ) -> None:
+        buffer_s = max(0.0, float(self.get_parameter("capture_buffer_s").value))
+        if buffer_s > 0.0:
+            self.get_logger().info(f"Waiting {buffer_s:.1f}s before RGB-D capture")
+            self._spin_wait(buffer_s)
+        capture = self._wait_for_new_capture()
+        self._capture_and_update(
+            capture,
+            tag=tag,
+            candidate_idx=candidate_idx,
+            expected_gain=expected_gain,
+            move_success=move_success,
+        )
+        if buffer_s > 0.0:
+            self.get_logger().info(f"Waiting {buffer_s:.1f}s after RGB-D capture")
+            self._spin_wait(buffer_s)
+
+    def _spin_wait(self, seconds: float) -> None:
+        deadline = time.monotonic() + max(0.0, float(seconds))
+        while rclpy.ok() and time.monotonic() < deadline:
+            rclpy.spin_once(self, timeout_sec=0.05)
 
     def _initialize_ap_state(self, camera_info: CameraInfo) -> None:
         if self._accumulator is not None:
@@ -410,8 +472,15 @@ class ActivePerceptionCoordinator(Node):
         depth_m = self._depth_to_meters(depth_raw)
         camera_frame = self._camera_frame_param or capture.camera_info.header.frame_id
         cam_to_world = self._lookup_camera_pose(camera_frame)
+        depth_intrinsics = _scale_intrinsics_matrix(
+            self._intrinsics,
+            width=int(depth_m.shape[1]),
+            height=int(depth_m.shape[0]),
+            base_width=int(capture.camera_info.width),
+            base_height=int(capture.camera_info.height),
+        )
 
-        counts = self._accumulator.update(depth_m, cam_to_world, self._intrinsics)
+        counts = self._accumulator.update(depth_m, cam_to_world, depth_intrinsics)
         unknown_points, unknown_scores = self._scorer.compute(self._accumulator)
         view_idx = len(self._view_records)
         saved_view = self._save_observation(
@@ -575,9 +644,7 @@ class ActivePerceptionCoordinator(Node):
             )
             return True
 
-        capture = self._wait_for_new_capture()
-        self._capture_and_update(
-            capture,
+        self._capture_with_buffer(
             tag=f"step_{step_idx:03d}_cand_{candidate_idx:03d}",
             candidate_idx=candidate_idx,
             expected_gain=expected_gain,
@@ -586,20 +653,23 @@ class ActivePerceptionCoordinator(Node):
         return True
 
     def _keyboard_process_capture(self) -> None:
+        if self._stop_if_capture_limit_reached():
+            return
         try:
             tag = "initial" if self._accumulator is None else f"manual_{len(self._view_records):03d}"
-            capture = self._wait_for_new_capture()
-            self._capture_and_update(
-                capture,
+            self._capture_with_buffer(
                 tag=tag,
                 candidate_idx=self._current_view_candidate_idx,
                 expected_gain=self._current_view_expected_gain,
                 move_success=True,
             )
+            self._stop_if_capture_limit_reached()
         except Exception as exc:
             self.get_logger().error(f"Failed to process RGB-D frame: {exc}")
 
     def _keyboard_select_next(self) -> None:
+        if self._stop_if_capture_limit_reached():
+            return
         if self._accumulator is None:
             self.get_logger().warn("No occupancy grid yet. Press p first.")
             return
@@ -609,6 +679,8 @@ class ActivePerceptionCoordinator(Node):
             self.get_logger().error(f"Failed to select next candidate: {exc}")
 
     def _keyboard_move_selected(self) -> None:
+        if self._stop_if_capture_limit_reached():
+            return
         if self._pending_candidate_idx is None:
             self.get_logger().warn("No selected candidate. Press n first.")
             return
@@ -658,7 +730,11 @@ class ActivePerceptionCoordinator(Node):
         preview_u8 = (preview * 255.0).astype(np.uint8)
         PILImage.fromarray(preview_u8, mode="L").save(depth_preview_path)
 
-        intrinsics_doc = self._write_intrinsics_json(camera_info)
+        intrinsics_doc = self._write_intrinsics_json(
+            camera_info,
+            rgb_shape_hw=rgb_arr.shape[:2],
+            depth_shape_hw=depth_m.shape[:2],
+        )
         pose_record = {
             "index": int(view_idx),
             "view_index": int(view_idx),
@@ -690,7 +766,12 @@ class ActivePerceptionCoordinator(Node):
         self.get_logger().info(f"Saved AP observation {file_stem}: {rgb_path}")
         return saved
 
-    def _write_intrinsics_json(self, camera_info: CameraInfo) -> dict:
+    def _write_intrinsics_json(
+        self,
+        camera_info: CameraInfo,
+        rgb_shape_hw: tuple[int, int] | None = None,
+        depth_shape_hw: tuple[int, int] | None = None,
+    ) -> dict:
         k = camera_info.k
         intrinsics_doc = {
             "width": int(camera_info.width),
@@ -702,6 +783,12 @@ class ActivePerceptionCoordinator(Node):
             "k": [float(v) for v in k],
             "camera_frame": camera_info.header.frame_id,
         }
+        if rgb_shape_hw is not None:
+            intrinsics_doc["saved_rgb_width"] = int(rgb_shape_hw[1])
+            intrinsics_doc["saved_rgb_height"] = int(rgb_shape_hw[0])
+        if depth_shape_hw is not None:
+            intrinsics_doc["saved_depth_width"] = int(depth_shape_hw[1])
+            intrinsics_doc["saved_depth_height"] = int(depth_shape_hw[0])
         path = self._views_dir / "intrinsics.json"
         path.write_text(json.dumps(intrinsics_doc, indent=2), encoding="utf-8")
         return intrinsics_doc
@@ -722,7 +809,7 @@ class ActivePerceptionCoordinator(Node):
         self.get_logger().info("Press n to select the next active-perception view")
         self.get_logger().info("Press m to move to the selected view and settle")
         self.get_logger().info("Press v to republish voxel markers")
-        self.get_logger().info("Press w to write summary and PLY outputs")
+        self.get_logger().info("Press w to write PLY output")
         self.get_logger().info("Press q to quit")
 
     def _poll_keyboard(self) -> None:
@@ -903,49 +990,8 @@ class ActivePerceptionCoordinator(Node):
         return result.returncode == 0
 
     def _write_outputs(self) -> None:
-        final_counts = self._accumulator.counts() if self._accumulator is not None else {}
-        summary = {
-            "format": "fetchbench_real_active_perception_v1",
-            "motion_mode": "joint_goals_dry_run" if bool(self.get_parameter("dry_run_motion").value) else "joint_goals",
-            "stop_reason": self._stop_reason,
-            "output_root": str(self._output_root),
-            "experiment_name": self._experiment_name,
-            "candidates_json": str(self._candidates_path),
-            "num_candidates_loaded": len(self._candidates),
-            "used_candidate_indices": sorted(int(v) for v in self._used_indices),
-            "planned_moves": self._planned_moves,
-            "views": self._view_records,
-            "views_dir": str(self._views_dir),
-            "pose_json": str(self._views_dir / "pose.json"),
-            "intrinsics_json": str(self._views_dir / "intrinsics.json"),
-            "final_grid_counts": final_counts,
-            "roi": {
-                "x_range": list(self.get_parameter("x_range").value),
-                "y_range": list(self.get_parameter("y_range").value),
-                "z_range": list(self.get_parameter("z_range").value),
-                "voxel_size_m": float(self.get_parameter("voxel_size_m").value),
-            },
-            "depth_limits_m": {
-                "min": float(self.get_parameter("min_depth_m").value),
-                "max": float(self._max_depth_m),
-                "depth_scale": float(self._depth_scale),
-            },
-            "topics": {
-                "rgb": self._rgb_topic,
-                "depth": self._depth_topic,
-                "camera_info": self._camera_info_topic,
-            },
-            "frames": {
-                "world_frame": self._world_frame,
-                "camera_frame": self._camera_frame_param,
-            },
-        }
-        summary_path = self._output_dir / "summary.json"
-        summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
-        self.get_logger().info(f"Saved AP summary: {summary_path}")
-
         if bool(self.get_parameter("write_final_ply").value) and self._accumulator is not None:
-            ply_path = self._output_dir / "occupancy_final.ply"
+            ply_path = self._output_dir / "occupancy_grid.ply"
             self._accumulator.write_ply(ply_path, include_unknown=bool(self.get_parameter("include_unknown_in_ply").value))
             self.get_logger().info(f"Saved final occupancy PLY: {ply_path}")
 

@@ -8,6 +8,7 @@ fetchbench_active_perception:
     capture_timeout_s: 10.0
     tf_timeout_s: 2.0
     settle_time_s: 0.8
+    capture_buffer_s: 2.0
 
     top_k: 100
     max_steps: 15

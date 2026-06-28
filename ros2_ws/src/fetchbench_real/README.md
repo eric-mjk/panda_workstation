@@ -35,7 +35,7 @@ ROS RGB-D + TF
   -> unknown voxel scoring
   -> candidate next-best-view selection
   -> optional Panda joint goal execution
-  -> summary.json
+  -> RGB-D views, poses, intrinsics, occupancy_grid.ply
 ```
 
 Dry-run motion is enabled by default:

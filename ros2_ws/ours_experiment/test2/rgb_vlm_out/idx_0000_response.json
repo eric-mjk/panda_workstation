@@ -1,0 +1,30 @@
+{
+  "Target object": "mustard bottle(material=plastic)",
+  "Surrounding objects": [
+    "small can(material=metal)",
+    "red box(material=paper)"
+  ],
+  "Physical relationships": "The mustard bottle is resting on top of the red box and is in near-contact with the small metal can to its left.",
+  "Speed": "fast",
+  "Reason": "The object is mostly unconstrained on its right and bottom sides, allowing for quick and safe retrieval in those directions.",
+  "Direction scores": [
+    0.8,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.8,
+    0.3,
+    0.0,
+    0.0,
+    0.4
+  ],
+  "Best direction reason": "Directions from 1 to 6 o'clock are completely free of obstacles, leading into open space.",
+  "Worst direction reason": "Moving towards 9 or 10 o'clock will cause a direct collision with the adjacent small metal can.",
+  "elapsed_s": 33.94515347480774,
+  "provider": "gemini",
+  "model": "gemini-3.1-pro-preview",
+  "image_rotated_180": false
+}

@@ -1,0 +1,159 @@
+{
+  "format": "fetchbench_real_prep_v1",
+  "experiment_dir": "/workspace/ros2_ws/ours_experiment/test2",
+  "views_dir": "/workspace/ros2_ws/ours_experiment/test2",
+  "view_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "vlm_view_indices": [
+    0,
+    7,
+    12,
+    14
+  ],
+  "num_vlm_views_requested": 4,
+  "grasp_position_world": [
+    0.5,
+    0.0,
+    0.12
+  ],
+  "target_class_id": 1,
+  "background_class_id": 0,
+  "target_point_json": "/workspace/ros2_ws/ours_experiment/test2/target_point.json",
+  "rgb_vlm_in_dir": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in",
+  "masks_dir": "/workspace/ros2_ws/ours_experiment/test2/masks",
+  "mask_manifest": "/workspace/ros2_ws/ours_experiment/test2/masks/masks_manifest.json",
+  "prepared_vlm_inputs": [
+    {
+      "index": 0,
+      "usable": true,
+      "target_pixel_uv": [
+        958.6679915040735,
+        225.8714129100561
+      ],
+      "display_target_pixel_uv": [
+        958.6679915040735,
+        225.8714129100561
+      ],
+      "target_depth_m": 0.4157989724029848,
+      "image_rotated_180": false,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "projection_intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0000.png",
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0000_input_with_query.png"
+    },
+    {
+      "index": 7,
+      "usable": true,
+      "target_pixel_uv": [
+        1288.437282939293,
+        696.9740646785822
+      ],
+      "display_target_pixel_uv": [
+        630.562717060707,
+        382.0259353214178
+      ],
+      "target_depth_m": 0.5226104235524137,
+      "image_rotated_180": true,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "projection_intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0007.png",
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0007_input_with_query.png"
+    },
+    {
+      "index": 12,
+      "usable": true,
+      "target_pixel_uv": [
+        1027.2894150604634,
+        749.0182057239152
+      ],
+      "display_target_pixel_uv": [
+        1027.2894150604634,
+        749.0182057239152
+      ],
+      "target_depth_m": 0.5070811288633095,
+      "image_rotated_180": false,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "projection_intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0012.png",
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0012_input_with_query.png"
+    },
+    {
+      "index": 14,
+      "usable": true,
+      "target_pixel_uv": [
+        1300.248067501084,
+        529.2033064705232
+      ],
+      "display_target_pixel_uv": [
+        1300.248067501084,
+        529.2033064705232
+      ],
+      "target_depth_m": 0.5213737720086832,
+      "image_rotated_180": false,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "projection_intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0014.png",
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0014_input_with_query.png"
+    }
+  ],
+  "sam_placeholder": {
+    "implemented": false,
+    "expected_output": "Write class-mask PNGs into masks/ named 0000.png, 0001.png, ... using target_class_id for target pixels."
+  }
+}

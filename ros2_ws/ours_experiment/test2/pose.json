@@ -1,0 +1,1112 @@
+{
+  "format": "fetchbench_real_views_v1",
+  "world_frame": "panda_link0",
+  "reached_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "poses": [
+    {
+      "index": 0,
+      "view_index": 0,
+      "candidate_index": null,
+      "tag": "initial",
+      "move_success": true,
+      "sync_index": 29,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.40739039917434683,
+        -0.00015766282522757216,
+        0.5359664577149128
+      ],
+      "cam_matrix": [
+        [
+          -0.00042485508620293544,
+          -0.999998289910935,
+          -0.0017999092648308067,
+          0.40739039917434683
+        ],
+        [
+          -0.9999997954746884,
+          0.0004257148281152645,
+          -0.0004773022799921459,
+          -0.00015766282522757216
+        ],
+        [
+          0.0004780677118260366,
+          0.0017997061124024926,
+          -0.9999982662530833,
+          0.5359664577149128
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0000.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0000.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0000.png"
+    },
+    {
+      "index": 1,
+      "view_index": 1,
+      "candidate_index": 93,
+      "tag": "step_001_cand_093",
+      "move_success": true,
+      "sync_index": 82,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.6364522601416301,
+        -0.18158322099927302,
+        0.3472692162751221
+      ],
+      "cam_matrix": [
+        [
+          0.7956941817515625,
+          -0.4618269390149313,
+          -0.39190132371148,
+          0.6364522601416301
+        ],
+        [
+          -0.0086143009753758,
+          -0.6555866822649297,
+          0.7550707886387659,
+          -0.18158322099927302
+        ],
+        [
+          -0.6056373196438748,
+          -0.5974294773753309,
+          -0.5256248249632258,
+          0.3472692162751221
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0001.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0001.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0001.png"
+    },
+    {
+      "index": 2,
+      "view_index": 2,
+      "candidate_index": 67,
+      "tag": "step_002_cand_067",
+      "move_success": true,
+      "sync_index": 139,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.30420981645204703,
+        -0.26860388119893785,
+        0.2908824717369982
+      ],
+      "cam_matrix": [
+        [
+          0.96322922673894,
+          0.16897804055120694,
+          0.20889202609812174,
+          0.30420981645204703
+        ],
+        [
+          -0.11001343907530163,
+          -0.4612649441835155,
+          0.8804156373498845,
+          -0.26860388119893785
+        ],
+        [
+          0.24512547802855705,
+          -0.8710230037598622,
+          -0.42571402013842397,
+          0.2908824717369982
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0002.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0002.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0002.png"
+    },
+    {
+      "index": 3,
+      "view_index": 3,
+      "candidate_index": 91,
+      "tag": "step_003_cand_091",
+      "move_success": true,
+      "sync_index": 188,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.19014309958005451,
+        0.14801294533444898,
+        0.30537412291307353
+      ],
+      "cam_matrix": [
+        [
+          -0.5661149321753056,
+          0.11737640407195976,
+          0.8159268737670585,
+          0.19014309958005451
+        ],
+        [
+          -0.4996058139178186,
+          0.7384450503123499,
+          -0.4528718785359775,
+          0.14801294533444898
+        ],
+        [
+          -0.6556736339579802,
+          -0.6640193426673104,
+          -0.3594028356816481,
+          0.30537412291307353
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0003.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0003.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0003.png"
+    },
+    {
+      "index": 4,
+      "view_index": 4,
+      "candidate_index": 29,
+      "tag": "step_004_cand_029",
+      "move_success": true,
+      "sync_index": 240,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.24467416965179142,
+        0.35219907356233965,
+        0.23996222542487616
+      ],
+      "cam_matrix": [
+        [
+          -0.3249404046062512,
+          -0.6964075519275928,
+          0.6398673730333057,
+          0.24467416965179142
+        ],
+        [
+          -0.6708300614760695,
+          -0.30718950488781616,
+          -0.6749975086671002,
+          0.35219907356233965
+        ],
+        [
+          0.6666339040840478,
+          -0.6485762327629622,
+          -0.3673528388629457,
+          0.23996222542487616
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0004.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0004.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0004.png"
+    },
+    {
+      "index": 5,
+      "view_index": 5,
+      "candidate_index": 8,
+      "tag": "step_005_cand_008",
+      "move_success": true,
+      "sync_index": 300,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.043692097584816104,
+        -0.128510067671423,
+        0.3283512427479703
+      ],
+      "cam_matrix": [
+        [
+          0.610527269456629,
+          0.030192463235643813,
+          0.7914195274401542,
+          0.043692097584816104
+        ],
+        [
+          -0.473562143333066,
+          -0.7870448257471157,
+          0.39534711162026376,
+          -0.128510067671423
+        ],
+        [
+          0.6348191471999135,
+          -0.6161565202352864,
+          -0.4662143208009786,
+          0.3283512427479703
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0005.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0005.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0005.png"
+    },
+    {
+      "index": 6,
+      "view_index": 6,
+      "candidate_index": 58,
+      "tag": "step_006_cand_058",
+      "move_success": true,
+      "sync_index": 361,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.24635354313514285,
+        0.38088363322596597,
+        0.37839107867711347
+      ],
+      "cam_matrix": [
+        [
+          0.08915272617125836,
+          -0.802417276132099,
+          0.5900663576081726,
+          0.24635354313514285
+        ],
+        [
+          -0.8590150375115285,
+          -0.3617965073634548,
+          -0.3622105086668158,
+          0.38088363322596597
+        ],
+        [
+          0.5041279170461603,
+          -0.47458382001955024,
+          -0.7215436515072053,
+          0.37839107867711347
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0006.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0006.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0006.png"
+    },
+    {
+      "index": 7,
+      "view_index": 7,
+      "candidate_index": 32,
+      "tag": "step_007_cand_032",
+      "move_success": true,
+      "sync_index": 423,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.3617746922265839,
+        0.264971417662728,
+        0.5697725765687123
+      ],
+      "cam_matrix": [
+        [
+          0.12241520143779161,
+          -0.9322944481315296,
+          0.3403550799386889,
+          0.3617746922265839
+        ],
+        [
+          -0.9399521953269112,
+          -0.21899192485650154,
+          -0.2617869503007442,
+          0.264971417662728
+        ],
+        [
+          0.31859753444913047,
+          -0.2878708023241863,
+          -0.9031201538068809,
+          0.5697725765687123
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0007.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0007.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0007.png"
+    },
+    {
+      "index": 8,
+      "view_index": 8,
+      "candidate_index": 30,
+      "tag": "step_008_cand_030",
+      "move_success": true,
+      "sync_index": 474,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        -0.05475478037736434,
+        0.372918395999478,
+        -0.02346898804161851
+      ],
+      "cam_matrix": [
+        [
+          0.5288804506520941,
+          -0.06119183957955593,
+          0.8464874645775375,
+          -0.05475478037736434
+        ],
+        [
+          0.7843892448502008,
+          -0.3456029170327717,
+          -0.5150651767512254,
+          0.372918395999478
+        ],
+        [
+          0.32406632265844837,
+          0.9363835659105243,
+          -0.13478440566816818,
+          -0.02346898804161851
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0008.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0008.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0008.png"
+    },
+    {
+      "index": 9,
+      "view_index": 9,
+      "candidate_index": 15,
+      "tag": "step_009_cand_015",
+      "move_success": true,
+      "sync_index": 531,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.2182333267725006,
+        -0.37031005292922836,
+        0.3088616658119765
+      ],
+      "cam_matrix": [
+        [
+          0.9054471904121933,
+          0.06343091894223038,
+          0.4196926302626834,
+          0.2182333267725006
+        ],
+        [
+          -0.3449052181079122,
+          -0.46636073091623453,
+          0.8145845930173305,
+          -0.37031005292922836
+        ],
+        [
+          0.24739801110073373,
+          -0.882317509279636,
+          -0.4003873585941262,
+          0.3088616658119765
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0009.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0009.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0009.png"
+    },
+    {
+      "index": 10,
+      "view_index": 10,
+      "candidate_index": 2,
+      "tag": "step_010_cand_002",
+      "move_success": true,
+      "sync_index": 581,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.04446616174416124,
+        0.4109521871012107,
+        0.32892825555929234
+      ],
+      "cam_matrix": [
+        [
+          0.08193006770032407,
+          -0.7885198301752376,
+          0.6095276379517462,
+          0.04446616174416124
+        ],
+        [
+          -0.4610119208645922,
+          -0.5722047883000336,
+          -0.6782696285897322,
+          0.4109521871012107
+        ],
+        [
+          0.8836036853857954,
+          -0.22542883060276164,
+          -0.4103978185927799,
+          0.32892825555929234
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0010.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0010.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0010.png"
+    },
+    {
+      "index": 11,
+      "view_index": 11,
+      "candidate_index": 25,
+      "tag": "step_011_cand_025",
+      "move_success": true,
+      "sync_index": 637,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.11417786641386662,
+        -0.1767376268027377,
+        0.2910584113418766
+      ],
+      "cam_matrix": [
+        [
+          0.6419295721179745,
+          0.1598998376294976,
+          0.7499056383082439,
+          0.11417786641386662
+        ],
+        [
+          -0.4062197772487241,
+          -0.7585643436766314,
+          0.5094758375766597,
+          -0.1767376268027377
+        ],
+        [
+          0.6503167820473583,
+          -0.631674107771169,
+          -0.4219904081363306,
+          0.2910584113418766
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0011.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0011.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0011.png"
+    },
+    {
+      "index": 12,
+      "view_index": 12,
+      "candidate_index": 37,
+      "tag": "step_012_cand_037",
+      "move_success": true,
+      "sync_index": 687,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.6321487919148203,
+        0.1847373016029092,
+        0.580297733662836
+      ],
+      "cam_matrix": [
+        [
+          0.7282062316681379,
+          -0.656258442720557,
+          -0.1975867923664931,
+          0.6321487919148203
+        ],
+        [
+          -0.6852353992778334,
+          -0.6917080987833764,
+          -0.2280183186808366,
+          0.1847373016029092
+        ],
+        [
+          0.012966562236712859,
+          0.30143782515715684,
+          -0.9533976640564445,
+          0.580297733662836
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0012.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0012.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0012.png"
+    },
+    {
+      "index": 13,
+      "view_index": 13,
+      "candidate_index": 70,
+      "tag": "step_013_cand_070",
+      "move_success": true,
+      "sync_index": 740,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.4484533197564129,
+        0.4018996878263522,
+        0.0786122226968855
+      ],
+      "cam_matrix": [
+        [
+          0.686907136377279,
+          -0.7118717145949414,
+          -0.1462779817799817,
+          0.4484533197564129
+        ],
+        [
+          -0.23397569236249305,
+          -0.026062303421989785,
+          -0.9718930659922584,
+          0.4018996878263522
+        ],
+        [
+          0.6880508421457374,
+          0.7018257748900356,
+          -0.18446305950662123,
+          0.0786122226968855
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0013.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0013.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0013.png"
+    },
+    {
+      "index": 14,
+      "view_index": 14,
+      "candidate_index": 23,
+      "tag": "step_014_cand_023",
+      "move_success": true,
+      "sync_index": 805,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.5186806814288877,
+        0.29106368154485524,
+        0.5703964742955308
+      ],
+      "cam_matrix": [
+        [
+          0.4281073820506872,
+          -0.8917210561189876,
+          -0.14682515965509643,
+          0.5186806814288877
+        ],
+        [
+          -0.8655056267339457,
+          -0.3578044195868044,
+          -0.35053674189167383,
+          0.29106368154485524
+        ],
+        [
+          0.26004630265702067,
+          0.2771453687114178,
+          -0.9249683049035928,
+          0.5703964742955308
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0014.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0014.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0014.png"
+    },
+    {
+      "index": 15,
+      "view_index": 15,
+      "candidate_index": 74,
+      "tag": "step_015_cand_074",
+      "move_success": true,
+      "sync_index": 869,
+      "world_frame": "panda_link0",
+      "camera_frame": "l515_camera",
+      "cam_position": [
+        0.27568803014405713,
+        0.27804112811662585,
+        0.3024199478496781
+      ],
+      "cam_matrix": [
+        [
+          -0.0315238918738181,
+          -0.7477126059892887,
+          0.6632737768718394,
+          0.27568803014405713
+        ],
+        [
+          -0.815181695628205,
+          -0.3647502601622845,
+          -0.44992893974967907,
+          0.27804112811662585
+        ],
+        [
+          0.5783468227230547,
+          -0.5548721533436802,
+          -0.5980232822306295,
+          0.3024199478496781
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "intrinsics": {
+        "width": 1920,
+        "height": 1080,
+        "fx": 1399.0697520372776,
+        "fy": 1399.0697520372776,
+        "cx": 960.0,
+        "cy": 540.0,
+        "k": [
+          1399.0697520372776,
+          0.0,
+          960.0,
+          0.0,
+          1399.0697520372776,
+          540.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "camera_frame": "l515_camera",
+        "saved_rgb_width": 1920,
+        "saved_rgb_height": 1080,
+        "saved_depth_width": 1920,
+        "saved_depth_height": 1080
+      },
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0015.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0015.png",
+      "depth_preview_path": "/workspace/ros2_ws/ours_experiment/test2/depth_preview/0015.png"
+    }
+  ]
+}

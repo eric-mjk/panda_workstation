@@ -1,0 +1,454 @@
+{
+  "format": "fetchbench_real_mask_manifest_v1",
+  "status": "complete",
+  "source": "sam3_text_mask",
+  "prompt": "mustard bottle",
+  "point_mode": "auto",
+  "fixed_point": null,
+  "fixed_box": null,
+  "server_ip": "192.168.0.71",
+  "port": 5050,
+  "view_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "target_class_id": 1,
+  "background_class_id": 0,
+  "threshold": 127,
+  "masks_dir": "/workspace/ros2_ws/ours_experiment/test2/masks",
+  "raw_masks_dir": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3",
+  "overlay_dir": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay",
+  "results_dir": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results",
+  "views": [
+    {
+      "index": 0,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0000.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0000.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0000.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0000_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0000_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0000_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        958.6679915040735,
+        225.8714129100561
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 106847,
+      "elapsed_s": 0.8788487911224365
+    },
+    {
+      "index": 1,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0001.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0001.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0001.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0001_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0001_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0001_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1084.1131932629107,
+        899.8778559978316
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 319734,
+      "elapsed_s": 0.8350574970245361
+    },
+    {
+      "index": 2,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0002.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0002.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0002.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0002_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0002_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0002_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1428.1284837426535,
+        771.8772223412783
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 192348,
+      "elapsed_s": 0.7795279026031494
+    },
+    {
+      "index": 3,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0003.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0003.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0003.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0003_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0003_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0003_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1032.6854190269598,
+        721.591835070117
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 92008,
+      "elapsed_s": 0.7646181583404541
+    },
+    {
+      "index": 4,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0004.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0004.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0004.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0004_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0004_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0004_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1190.4537212768703,
+        565.7253496088189
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 45542,
+      "elapsed_s": 0.7776212692260742
+    },
+    {
+      "index": 5,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0005.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0005.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0005.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0005_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0005_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0005_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1194.8821886147555,
+        652.7087822776718
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 60810,
+      "elapsed_s": 0.8081691265106201
+    },
+    {
+      "index": 6,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0006.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0006.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0006.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0006_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0006_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0006_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1607.893421552532,
+        707.9239198399357
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 65643,
+      "elapsed_s": 0.7679455280303955
+    },
+    {
+      "index": 7,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0007.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0007.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0007.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0007_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0007_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0007_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1288.437282939293,
+        696.9740646785822
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 81974,
+      "elapsed_s": 0.7686092853546143
+    },
+    {
+      "index": 8,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0008.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0008.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0008.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0008_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0008_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0008_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1063.1970718182158,
+        1039.3903387438095
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 0,
+      "elapsed_s": 0.5362687110900879
+    },
+    {
+      "index": 9,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0009.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0009.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0009.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0009_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0009_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0009_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1187.7910791353283,
+        573.3463695190839
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 80657,
+      "elapsed_s": 0.8012790679931641
+    },
+    {
+      "index": 10,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0010.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0010.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0010.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0010_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0010_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0010_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1051.86956540586,
+        372.3440228129376
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 26733,
+      "elapsed_s": 0.7534067630767822
+    },
+    {
+      "index": 11,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0011.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0011.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0011.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0011_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0011_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0011_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1160.2567786758352,
+        650.5452940478722
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 77703,
+      "elapsed_s": 0.8395192623138428
+    },
+    {
+      "index": 12,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0012.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0012.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0012.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0012_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0012_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0012_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1027.2894150604634,
+        749.0182057239152
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 109624,
+      "elapsed_s": 0.8182239532470703
+    },
+    {
+      "index": 13,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0013.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0013.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0013.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0013_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0013_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0013_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1548.5011223274023,
+        550.534389765393
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 0,
+      "elapsed_s": 0.8269002437591553
+    },
+    {
+      "index": 14,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0014.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0014.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0014.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0014_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0014_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0014_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1300.248067501084,
+        529.2033064705232
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 97857,
+      "elapsed_s": 0.7667417526245117
+    },
+    {
+      "index": 15,
+      "status": "ok",
+      "rgb_path": "/workspace/ros2_ws/ours_experiment/test2/rgb/0015.png",
+      "depth_path": "/workspace/ros2_ws/ours_experiment/test2/depth/0015.png",
+      "mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/0015.png",
+      "overlay_path": "/workspace/ros2_ws/ours_experiment/test2/masks/overlay/0015_overlay.png",
+      "raw_mask_path": "/workspace/ros2_ws/ours_experiment/test2/masks/raw_sam3/0015_sam3_union.png",
+      "sam3_result_json": "/workspace/ros2_ws/ours_experiment/test2/masks/sam3_results/0015_sam3_result.json",
+      "prompt": "mustard bottle",
+      "point_xy": [
+        1376.7608887234928,
+        667.5496333198939
+      ],
+      "box_xyxy": null,
+      "rgb_size": [
+        1920,
+        1080
+      ],
+      "depth_size": [
+        1920,
+        1080
+      ],
+      "target_pixels": 85556,
+      "elapsed_s": 0.8071246147155762
+    }
+  ]
+}

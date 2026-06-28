@@ -1,0 +1,28 @@
+```json
+{
+  "Target object": "mustard bottle(plastic)",
+  "Surrounding objects": [
+    "red box(paper)",
+    "small soup can(metal)"
+  ],
+  "Physical relationships": "The mustard bottle is resting on the red box, with a small soup can lying on the same box immediately to its bottom-right.",
+  "Speed": "slow",
+  "Reason": "The small soup can is resting on a slanted surface near the target; a slow retrieval minimizes the risk of destabilizing it.",
+  "Direction scores": [
+    0.80,
+    0.60,
+    0.20,
+    0.10,
+    0.20,
+    0.70,
+    0.80,
+    0.90,
+    0.90,
+    0.90,
+    0.90,
+    0.90
+  ],
+  "Best direction reason": "Directions between 8 and 12 o'clock move the target away from the adjacent small can and into clear space.",
+  "Worst direction reason": "Moving towards 4 o'clock would push the target directly into the adjacent metal soup can, causing a collision."
+}
+```

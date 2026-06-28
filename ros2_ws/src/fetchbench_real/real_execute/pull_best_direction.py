@@ -21,6 +21,9 @@ def _result_json_path(node: Node) -> Path:
 
     output_root = Path(str(node.get_parameter("output_root").value))
     experiment_name = str(node.get_parameter("experiment_name").value)
+    new_path = output_root / experiment_name / "directions" / "final_3d_direction.json"
+    if new_path.is_file():
+        return new_path
     return output_root / experiment_name / "offline" / "final_3d_direction.json"
 
 
@@ -74,7 +77,7 @@ def main() -> None:
     node.declare_parameter("output_root", "/workspace/ros2_ws/ours_experiment")
     node.declare_parameter("experiment_name", "ex1")
     node.declare_parameter("result_json", "")
-    node.declare_parameter("direction_key", "best_direction")
+    node.declare_parameter("direction_key", "aggregate_direction")
     node.declare_parameter("pull_distance_m", 0.15)
     node.declare_parameter("base_link_name", "panda_link0")
     node.declare_parameter("end_effector_name", "panda_hand_tcp")

@@ -1,0 +1,33 @@
+{
+  "status": "ok",
+  "mode": "text_geometric",
+  "image_size": [
+    1920,
+    1080
+  ],
+  "mask_shape": [
+    1080,
+    1920
+  ],
+  "num_masks": 1,
+  "boxes_xyxy": [
+    [
+      1005.4113159179688,
+      130.1124267578125,
+      1138.986083984375,
+      505.91552734375
+    ]
+  ],
+  "scores": [
+    0.91015625
+  ],
+  "prompt": "mustard bottle",
+  "positive_points": [
+    [
+      1051.86956540586,
+      372.3440228129376
+    ]
+  ],
+  "negative_points": [],
+  "box_xyxy": null
+}

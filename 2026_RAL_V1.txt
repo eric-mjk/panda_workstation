@@ -1,0 +1,183 @@
+\section{Method}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=1\linewidth]{fig/fig2_2.pdf}
+  % \fbox{\rule{0pt}{0.3\columnwidth} \rule{1.0\columnwidth}{0pt}}
+  \caption{Figure 2 (Used in 3.1), \textcolor{red}{NEED TO CHANGE (change image and get more readability)}}
+  \label{fig:fig2}
+\end{figure*}
+
+\subsection{Overview}
+
+\figref{fig:fig2} illustrates the overall pipeline of our method. The robot incrementally builds a voxel-based representation from RGB-D observations and actively selects informative viewpoints from predefined viewpoint candidates. Using the acquired images, a zero-shot VLM performs semantic retrieval reasoning and predicts 2D directional scores that reflect how suitable each image-plane direction is for extracting the target object. The resulting VLM scores from multiple views are lifted to candidate 3D retrieval directions and fused with geometric clearance scores to determine the final retrieval direction.
+
+% Figure 2 illustrates our proposed pipeline. The RGB-D images obtained so far are used to estimate the occupancy of the region of interest, which is divided into voxels. Then, the system selects the view from which the largest amount of information can be obtained by comparing the weighted sum of scores assigned to the voxels classified as unseen. Among the selected views, we choose the subset views that best observe the target object and compute 2D directional scores on the image plane with zero-shot VLM, which are then mapped into 3D. Finally, we combine the integrated score obtained from the VLM with the geometric score derived from the local point cloud to determine the final retrieval direction.
+
+% Figure 2는 우리들의 proposed pipeline을 나타낸 것이다. 이전까지 얻은 rgb-d image들은 voxel로 나뉜 roi의 occupancy 판단에 영향을 미친다. 그 뒤 unseen으로 분류된 복셀들의 점수의 weighted sum을 비교하여 가장 정보를 많이 얻을 수 있는 view를 선택한다. 이렇게 선택된 뷰들 중 타겟 물체를 가장 잘 보고 있는 뷰들에 대해 image plane 상에서 2d directional score를 구하고, 그를 3d로 mapping한다. zero-shot vlm으로부터 얻은 통합된 점수와 local point cloud에서 얻을 수 있는 geometry 점수를 종합하여 최종 retrieval direction을 얻는다.
+
+\subsection{Voxel-based Active Perception}
+
+% \begin{wrapfigure}[10]{r}{0.45\linewidth}
+%   \centering
+%   % \includegraphics[width=0.95\linewidth]{figure/fig1_ver1.pdf}
+%   \fbox{%
+%     \rule{0pt}{0.5\linewidth}%
+%     \rule{0.8\linewidth}{0pt}%
+%   }
+%   \caption{Figure 3 (Used in 3.2)}
+%   \label{fig:fig3}
+% \end{wrapfigure}
+
+Following standard occupancy grid mapping \cite{thrun2002probabilistic} and recent active reconstruction methods \cite{chen2024gennbv}, we represent the region of interest as a voxel grid and maintain an occupancy log-odds value \(L_i\) for each voxel. The map is updated from RGB-D observations by adding occupied evidence \(+L_{\mathrm{hit}}\) to ray endpoints and free-space evidence \(-L_{\mathrm{free}}\) to traversed voxels. Each voxel is then discretized into an occupancy state \(g_i \in \{-1,0,1\}\) with occupancy threshold \(\tau_{\mathrm{occ}}\), corresponding to free, unknown, and occupied space:
+
+% We represent the region of interest as a voxel grid with a log-odds value \(L_i\) for each voxel \(v_i\). Each voxel is discretized into an occupancy state \(g_i \in \{-1,0,1\}\), corresponding to free, unseen, and occupied space:
+\[
+g_i =
+\begin{cases}
+1, & L_i \ge \tau_{\mathrm{occ}}, \\
+-1, & L_i < 0, \\
+0, & \text{otherwise}.
+\end{cases}
+\]
+
+Candidate viewpoints are evaluated only over frontier unknown voxels \(\mathcal{F}_t\), defined as unknown voxels adjacent to the currently observed free or occupied space.
+
+\paragraph{Unknown voxel scoring}
+Several studies have evaluated candidate viewpoints using the number of hidden or unexplored voxels expected to be observed from each view \cite{breyer2022closed, jin2025activegs}. However, treating all voxels with a uniform contribution can be suboptimal, since unseen regions near the object are generally more informative than distant unexplored space. We therefore prioritize unknown voxels close to the currently observed occupied surface, as these regions are more likely to represent object geometry, as illustrated in \figref{fig:fig3} (a). Let \(d_i\) be the Euclidean distance to the nearest occupied voxel, and we convert this into a normalized surface-proximity score:
+
+\[
+s_i =
+\mathrm{clip}\!\left(
+1 - \frac{d_i - d_{\min}}{d_{\max} - d_{\min}},
+\,0,\,1
+\right).
+\]
+
+\paragraph{Failure penalty for targeted voxel}
+A high-scoring unknown voxel may remain unresolved even after the robot moves to a viewpoint selected to observe it, due to occlusion, depth-sensing failure, or limited viewing geometry. If such voxels are repeatedly assigned high scores, the active view selection can become biased toward regions that are difficult to resolve, reducing exploration efficiency and robustness. To avoid this, we maintain a penalty factor \(\alpha_i\) for each unknown voxel and define the final voxel score as $s_i = \alpha_i \bar{s}_i$, as illustrated in \figref{fig:fig3} (b).
+
+After executing a selected viewpoint, we identify the unknown voxels that were expected to be observed from the reached camera pose. 
+If a targeted voxel remains unknown after the map update, we update its penalty factor as
+\[
+\alpha_i \leftarrow \alpha_i \rho_i,
+\qquad
+\rho_i = \rho_{\min} + (1 - \rho_{\min}) \cdot
+\mathrm{clip}\!\left(\frac{d_i^{\mathrm{cam}}}{d_{\mathrm{pen}}}, 0, 1\right),
+\]
+where \(d_i^{\mathrm{cam}}\) is the distance from voxel \(v_i\) to the reached camera pose. 
+Nearby voxels receive a stronger penalty when they remain unresolved despite being targeted, while distant voxels are penalized less aggressively to avoid suppressing regions that may simply require closer observation.
+
+% To avoid this, after executing a selected viewpoint, we identify the unknown voxels that were expected to be observed from the reached camera pose. If a targeted voxel remains unknown after the map update, we penalize the score:
+% % After executing a selected viewpoint, we mark the unseen voxels that were visible from the reached camera pose. If a targeted voxel remains unseen after the subsequent update, we penalies the score:
+% \[
+% s_i \leftarrow s_i \cdot \rho_i,
+% \qquad
+% \rho_i = \rho_{\min} + (1 - \rho_{\min}) \cdot
+% \mathrm{clip}\!\left(\frac{d_i^{\mathrm{cam}}}{d_{\mathrm{pen}}}, 0, 1\right),
+% \]
+% where \(d_i^{\mathrm{cam}}\) is the distance from the voxel to the camera. Voxels closer to the camera therefore receive a stronger penalty when repeatedly targeted but not resolved, while distant voxels are penalized less.
+
+\paragraph{View scoring}
+Let \(c\) denote a candidate camera pose from a predefined candidate set \(\mathcal{C}\), whose poses are sampled to cover the region of interest. 
+For each candidate, we estimate the utility of observing frontier unknown voxels as
+\[
+S(c) =
+\sum_{i \in \mathcal{F}_t}
+m_i(c)\,
+\frac{s_i}{d_i^{\mathrm{cam}}(c) + \epsilon},
+\]
+where \(m_i(c)\) indicates whether voxel \(i\) is expected to be visible from \(c\), \(d_i^{\mathrm{cam}}(c)\) is the distance from the camera at pose \(c\) to voxel \(i\), and \(\epsilon\) is a small constant for numerical stability. 
+The distance term favors closer observations, which are typically more reliable for RGB-D sensing. 
+The next viewpoint is selected as
+\[
+c^\star = \arg\max_{c \in \mathcal{C} \setminus \mathcal{C}_{\mathrm{used}}} S(c).
+\]
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\linewidth]{fig/fig3.pdf}
+    % \fbox{\rule{0pt}{0.5\columnwidth} \rule{1.0\columnwidth}{0pt}}
+    \caption{Figure 3 (Used in 3.2)}
+    \label{fig:fig3}
+\end{figure*}
+
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\linewidth]{fig/fig4.pdf}
+  % \fbox{\rule{0pt}{0.4\columnwidth} \rule{1.0\columnwidth}{0pt}}
+  \caption{Figure 4 (Used in 3.3) \textcolor{red}{NEED TO CHANGE (readability)}}
+  \label{fig:fig4}
+\end{figure}
+
+\subsection{VLM-guided 3D Reasoning}
+
+Recent advances in data curation and training methodologies have enabled VLMs to provide useful spatial reasoning cues from images. While this capability makes VLMs attractive for reasoning in cluttered scenes, two key challenges remain before such predictions can be directly used for robotic manipulation. The first challenge is depth ambiguity. Since VLMs often produce image-plane points or trajectories, lifting such outputs into executable 3D robot motions introduces ambiguity along the depth dimension. The second challenge is multi-view consistency. Even when additional information such as pose matrices or visual observations is provided, trajectory-level predictions from different views may not be consistent in 3D space.
+
+To mitigate these issues, we formulate VLM-based retrieval reasoning as a 3D direction-selection problem. Instead of directly predicting an executable 3D trajectory, the VLM provides independent 2D directional scores in each view, and our method aggregates these view-level scores to evaluate candidate 3D extraction directions. For each view, the VLM predicts directional scores over 12 clock-wise directions $\mathbf{q}^{(k)} \in [0,1]^{12}$ on the image plane. During this process, we use a structured spatial reasoning prompt that guides the VLM to consider object properties and spatial relationships before assigning directional scores.
+
+We first sample a set of candidate 3D unit directions $\mathcal{V}{\mathrm{fib}}$ from a Fibonacci sphere. Given a 3D grasp point $\mathbf{x} \in \mathbb{R}^{3}$ and a candidate direction $\hat{\mathbf{v}} \in \mathcal{V}{\mathrm{fib}}$, we compute the image-plane displacement induced by moving a fixed step $\rho$ along $\hat{\mathbf{v}}$ in each view:
+\[
+(\Delta x_k, \Delta y_k) =
+\Pi_k(\mathbf{x} + \rho \hat{\mathbf{v}}) - \Pi_k(\mathbf{x})
+\]
+where $\Pi_k(\cdot)$ is the camera projection function of view $k$, and $\rho$ is a step size. A view-specific 2D directional score $r_k(\hat{\mathbf{v}})$ can be obtained by interpolating the neighboring clock-direction scores from the 2D direction of the projection $\phi_k = \operatorname{atan2}(-\Delta y_k, \Delta x_k).$
+
+Since $\hat{\mathbf{v}}$ is a unit direction and $\rho$ is fixed across candidates, the projected displacement length reflects how strongly the 3D direction is expressed in the image plane of each view. A direction that is nearly orthogonal to the image plane produces only a short projected displacement, making its 2D direction unreliable in that view. We therefore aggregate the view-specific scores using projection-based reliability weights:
+\[
+w_k(\hat{\mathbf{v}}) =
+\left(\sqrt{\Delta x_k^2 + \Delta y_k^2}\right)^{\gamma},
+\qquad
+S_{\mathrm{3D}}(\hat{\mathbf{v}})=
+\frac{
+\sum_i w_k(\hat{\mathbf{v}}) s_k(\hat{\mathbf{v}})
+}{
+\sum_k w_k(\hat{\mathbf{v}}) + \epsilon
+}.
+\]
+
+\subsection{3D Direction Selection from VLM and geometry}
+Although VLMs can provide semantic-aware 3D reasoning, their predictions may still hallucinate geometrically infeasible directions. To provide an explicit geometric constraint, we additionally evaluate each candidate 3D direction using a TSDF reconstructed from the depth observations. The TSDF provides a view-consistent estimate of occupied and free space, allowing us to penalize directions whose swept volume is likely to collide with the scene geometry.
+
+For each candidate direction $\hat{\mathbf{v}} \in \mathcal{V}{\mathrm{fib}}$, we evaluate the swept volume of the target object along a set of discrete displacements $\delta_j$. Let $\mathbf{p}$ be the target object points, and the swept point set induced by direction $\hat{\mathbf{v}}$ is defined as
+\[
+\mathbf{x}_{m,j}(\hat{\mathbf{v}})=\mathbf{p}_m+\delta_j\hat{\mathbf{v}},
+\quad j=1,\ldots,J,
+\quad m=1,\ldots,M.
+\]
+We then query the TSDF values at the swept points and compute a conservative clearance score at each step using the lower 0.1 quantile:
+\[
+c(\hat{\mathbf{v}}) =
+\operatorname{Q}_{0.10}
+\left(
+\big\{
+TSDF\left(\mathbf{x}_{m,j}(\hat{\mathbf{v}})\right)
+\big\}
+\right).
+\]
+Directions whose swept volume approaches occupied regions receive low geometry scores, while directions that remain in free space receive high scores. The geometry score is obtained by linearly mapping this clearance to [0,1] with collision and safety threshold $c_{\mathrm{coll}}$ and $c_{\mathrm{safe}}$:
+\[
+S_{\mathrm{geo}}(\hat{\mathbf{v}})=
+\begin{cases}
+0, & c(\hat{\mathbf{v}}) \leq c_{\mathrm{coll}} \\
+1, & c(\hat{\mathbf{v}}) \geq c_{\mathrm{safe}} \\
+\dfrac{c(\hat{\mathbf{v}}) - c_{\mathrm{coll}}}{c_{\mathrm{safe}} - c_{\mathrm{coll}}} & \text{otherwise}.
+\end{cases}
+\]
+
+Finally, we combine the instruction-conditioned VLM score and the explicit geometry score to evaluate each candidate 3D direction:
+\[
+S(\hat{\mathbf{v}}) =
+(1-\lambda_{\mathrm{geo}}) S_{\mathrm{VLM}}(\hat{\mathbf{v}})
++
+\lambda_{\mathrm{geo}} S_{\mathrm{geo}}(\hat{\mathbf{v}}).
+\]
+
+The final post-grasp retrieval direction is selected by maximizing the combined score over the candidate direction set:
+\[
+\hat{\mathbf{v}}^\star =
+\arg\max_{\hat{\mathbf{v}} \in \mathcal{V}_{\mathrm{fib}}}
+S(\hat{\mathbf{v}}).
+\]

@@ -1,0 +1,255 @@
+{
+  "format": "fetchbench_real_vlm_stage_v1",
+  "experiment_dir": "/workspace/ros2_ws/ours_experiment/test2",
+  "vlm_view_indices": [
+    0,
+    7,
+    12,
+    14
+  ],
+  "rgb_vlm_in_dir": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in",
+  "rgb_vlm_out_dir": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out",
+  "views": [
+    {
+      "index": 0,
+      "target_pixel_uv": [
+        958.6679915040735,
+        225.8714129100561
+      ],
+      "display_target_pixel_uv": [
+        958.6679915040735,
+        225.8714129100561
+      ],
+      "image_rotated_180": false,
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0000_input_with_query.png",
+      "response_json_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0000_response.json",
+      "score_overlay_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0000_scores.png",
+      "used_cache": false,
+      "direction_scores": [
+        0.8,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.8,
+        0.3,
+        0.0,
+        0.0,
+        0.4
+      ],
+      "response": {
+        "Target object": "mustard bottle(material=plastic)",
+        "Surrounding objects": [
+          "small can(material=metal)",
+          "red box(material=paper)"
+        ],
+        "Physical relationships": "The mustard bottle is resting on top of the red box and is in near-contact with the small metal can to its left.",
+        "Speed": "fast",
+        "Reason": "The object is mostly unconstrained on its right and bottom sides, allowing for quick and safe retrieval in those directions.",
+        "Direction scores": [
+          0.8,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.8,
+          0.3,
+          0.0,
+          0.0,
+          0.4
+        ],
+        "Best direction reason": "Directions from 1 to 6 o'clock are completely free of obstacles, leading into open space.",
+        "Worst direction reason": "Moving towards 9 or 10 o'clock will cause a direct collision with the adjacent small metal can.",
+        "elapsed_s": 33.94515347480774,
+        "provider": "gemini",
+        "model": "gemini-3.1-pro-preview",
+        "image_rotated_180": false
+      }
+    },
+    {
+      "index": 7,
+      "target_pixel_uv": [
+        1288.437282939293,
+        696.9740646785822
+      ],
+      "display_target_pixel_uv": [
+        630.562717060707,
+        382.0259353214178
+      ],
+      "image_rotated_180": true,
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0007_input_with_query.png",
+      "response_json_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0007_response.json",
+      "score_overlay_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0007_scores.png",
+      "used_cache": false,
+      "direction_scores": [
+        0.800000011920929,
+        0.8999999761581421,
+        0.8999999761581421,
+        0.8999999761581421,
+        0.8999999761581421,
+        0.8999999761581421,
+        0.800000011920929,
+        0.6000000238418579,
+        0.20000000298023224,
+        0.10000000149011612,
+        0.20000000298023224,
+        0.699999988079071
+      ],
+      "response": {
+        "Target object": "mustard bottle(plastic)",
+        "Surrounding objects": [
+          "red box(paper)",
+          "small soup can(metal)"
+        ],
+        "Physical relationships": "The mustard bottle is resting on the red box, with a small soup can lying on the same box immediately to its bottom-right.",
+        "Speed": "slow",
+        "Reason": "The small soup can is resting on a slanted surface near the target; a slow retrieval minimizes the risk of destabilizing it.",
+        "Direction scores": [
+          0.8,
+          0.6,
+          0.2,
+          0.1,
+          0.2,
+          0.7,
+          0.8,
+          0.9,
+          0.9,
+          0.9,
+          0.9,
+          0.9
+        ],
+        "Best direction reason": "Directions between 8 and 12 o'clock move the target away from the adjacent small can and into clear space.",
+        "Worst direction reason": "Moving towards 4 o'clock would push the target directly into the adjacent metal soup can, causing a collision.",
+        "elapsed_s": 16.483400106430054,
+        "provider": "gemini",
+        "model": "gemini-3.1-pro-preview",
+        "image_rotated_180": true
+      }
+    },
+    {
+      "index": 12,
+      "target_pixel_uv": [
+        1027.2894150604634,
+        749.0182057239152
+      ],
+      "display_target_pixel_uv": [
+        1027.2894150604634,
+        749.0182057239152
+      ],
+      "image_rotated_180": false,
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0012_input_with_query.png",
+      "response_json_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0012_response.json",
+      "score_overlay_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0012_scores.png",
+      "used_cache": false,
+      "direction_scores": [
+        0.8,
+        0.9,
+        1.0,
+        1.0,
+        1.0,
+        0.9,
+        0.9,
+        0.8,
+        0.4,
+        0.0,
+        0.2,
+        0.5
+      ],
+      "response": {
+        "Target object": "mustard bottle(material=plastic)",
+        "Surrounding objects": [
+          "cracker box(material=paper)",
+          "soup can(material=metal)"
+        ],
+        "Physical relationships": "The mustard bottle is resting on top of the cracker box. A soup can is located very close to, or in slight contact with, its top-left edge.",
+        "Speed": "slow",
+        "Reason": "A slower retrieval speed helps prevent unwanted movement of the underlying cracker box due to friction and minimizes the risk of knocking over the adjacent soup can.",
+        "Direction scores": [
+          0.8,
+          0.9,
+          1.0,
+          1.0,
+          1.0,
+          0.9,
+          0.9,
+          0.8,
+          0.4,
+          0.0,
+          0.2,
+          0.5
+        ],
+        "Best direction reason": "Directions around 3 to 5 o'clock move the bottle completely away from the soup can and safely over the flat surface of the cracker box into open space.",
+        "Worst direction reason": "Moving towards 10 o'clock will result in a direct collision with the soup can, likely displacing it.",
+        "elapsed_s": 30.18783187866211,
+        "provider": "gemini",
+        "model": "gemini-3.1-pro-preview",
+        "image_rotated_180": false
+      }
+    },
+    {
+      "index": 14,
+      "target_pixel_uv": [
+        1300.248067501084,
+        529.2033064705232
+      ],
+      "display_target_pixel_uv": [
+        1300.248067501084,
+        529.2033064705232
+      ],
+      "image_rotated_180": false,
+      "input_image_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_in/idx_0014_input_with_query.png",
+      "response_json_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0014_response.json",
+      "score_overlay_path": "/workspace/ros2_ws/ours_experiment/test2/rgb_vlm_out/idx_0014_scores.png",
+      "used_cache": false,
+      "direction_scores": [
+        0.8,
+        0.9,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.9,
+        0.7,
+        0.3,
+        0.1,
+        0.2,
+        0.5
+      ],
+      "response": {
+        "Target object": "mustard bottle(material=plastic)",
+        "Surrounding objects": [
+          "Cheez-It box(material=paper)",
+          "soup can(material=metal)",
+          "wooden block(material=paper)"
+        ],
+        "Physical relationships": "The mustard bottle is resting on top of the Cheez-It box, with the soup can lying against its upper-left side.",
+        "Speed": "slow",
+        "Reason": "Slow retrieval prevents dragging the underlying cardboard box and avoids knocking the adjacent soup can.",
+        "Direction scores": [
+          0.8,
+          0.9,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.9,
+          0.7,
+          0.3,
+          0.1,
+          0.2,
+          0.5
+        ],
+        "Best direction reason": "Moving right and down (3 to 6 o'clock) takes the bottle into empty space, safely away from all other objects.",
+        "Worst direction reason": "Moving top-left (10 o'clock) drives the bottle directly into the adjacent soup can, which would displace it.",
+        "elapsed_s": 32.7949013710022,
+        "provider": "gemini",
+        "model": "gemini-3.1-pro-preview",
+        "image_rotated_180": false
+      }
+    }
+  ]
+}

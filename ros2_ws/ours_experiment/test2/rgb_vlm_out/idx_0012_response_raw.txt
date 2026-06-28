@@ -1,0 +1,15 @@
+```json
+{
+  "Target object": "mustard bottle(material=plastic)",
+  "Surrounding objects": [
+    "cracker box(material=paper)",
+    "soup can(material=metal)"
+  ],
+  "Physical relationships": "The mustard bottle is resting on top of the cracker box. A soup can is located very close to, or in slight contact with, its top-left edge.",
+  "Speed": "slow",
+  "Reason": "A slower retrieval speed helps prevent unwanted movement of the underlying cracker box due to friction and minimizes the risk of knocking over the adjacent soup can.",
+  "Direction scores": [0.80, 0.90, 1.00, 1.00, 1.00, 0.90, 0.90, 0.80, 0.40, 0.00, 0.20, 0.50],
+  "Best direction reason": "Directions around 3 to 5 o'clock move the bottle completely away from the soup can and safely over the flat surface of the cracker box into open space.",
+  "Worst direction reason": "Moving towards 10 o'clock will result in a direct collision with the soup can, likely displacing it."
+}
+```
